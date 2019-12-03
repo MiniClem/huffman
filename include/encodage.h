@@ -1,0 +1,42 @@
+#ifndef __encodage_h__
+#define __encodage_h__
+#include "arbre.h"
+#include <string.h>
+#include <math.h>
+
+// TBD
+typedef struct encodage
+{
+	char *s_enc;
+} * p_encodage;
+
+p_encodage create_encodage();
+
+/**
+ * @brief Récupère l'index de position dans la chaine de caractère stocké par enc
+ * @return L'index de position, par exemple si la chaine vient d'être créée, la fonction renverra 
+ * 1 car le caractère '0\' est présente.
+ */
+int cursor(p_encodage enc);
+
+/**
+ * @brief Récupère la chaine de caractère actuellement déjà encodée de l'encodage donné
+ * @param enc : L'encodage duquel récupérer la chaine déjà encodée
+ * @return Une chaine de caractère contenant l'encodage 
+ */
+char *s_encodage(p_encodage enc);
+
+char charAt_encodage(int i, p_encodage enc);
+
+/**
+ * @brief Fonction d'append pour ajouter une chaine de caractère à l'encodage
+ * @param chaine : La chaine à ajouter à l'encodage
+ * @param enc : L'encodage qui se verra append
+ */
+void append_encodage(char *chaine, p_encodage enc);
+
+void print_encodage(p_encodage enc);
+
+void create_code(Arbre a, int i, p_encodage enc);
+
+#endif
