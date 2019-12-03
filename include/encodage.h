@@ -1,6 +1,7 @@
 #ifndef __encodage_h__
 #define __encodage_h__
 #include "arbre.h"
+#include <stdlib.h>
 #include <string.h>
 #include <math.h>
 

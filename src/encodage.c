@@ -29,7 +29,7 @@ char *s_encodage(p_encodage enc)
 
 int cursor(p_encodage enc)
 {
-	return sizeof s_encodage(enc);
+	return strlen(s_encodage(enc));
 }
 
 char charAt_encodage(int i, p_encodage enc)
@@ -41,13 +41,13 @@ char charAt_encodage(int i, p_encodage enc)
 void append_encodage(char *chaine, p_encodage enc)
 {
 	// Point d'amélioration, utiliser une allocation dynamique de mémoire et utiliser memcpy pour ajouter des éléments
-	int length_enc = strlen(s_encodage(enc) - 1);
-	int length = strlen(chaine);
+	int length_enc = strlen(s_encodage(enc));
+	int length = strlen(chaine) + 1;
 
 	// Créer un nouvel espace mémoire qui peut contenir toutes les chaines
 	char *s_new_encodage = (char *)malloc(length_enc + length);
 	memcpy(s_new_encodage, s_encodage(enc), length_enc);
-	memcpy(s_new_encodage, chaine, length);
+	memcpy(s_new_encodage + length_enc, chaine, length);
 
 	free(enc->s_enc);
 	enc->s_enc = s_new_encodage;
@@ -61,6 +61,8 @@ void print_encodage(p_encodage enc)
 	{
 		printf("%c", charAt_encodage(i, enc));
 	}
+
+	printf("\n");
 }
 
 void create_code(Arbre a, int i, p_encodage enc)
@@ -113,16 +115,35 @@ void code_ascii(char c, char *c_tab)
 	binaire((int)c, c_tab);
 }
 
+// TESTS
 int main()
 {
-	char c[ASCII_SIZE];
+	p_encodage p_enc = create_encodage();
 
+	// On imagine un début de suite telle que :
+	append_encodage("00001", p_enc);
+
+	// Le contenu dans encodage est le même :
+	assert(strcmp(s_encodage(p_enc), "00001") == 0);
+
+	// Le curseur est bien placé sur le '\0' :
+	assert(cursor(p_enc) == 5);
+
+	// On veut vérifier que l'on trouve bien le 1 à la position 4 :
+	assert(charAt_encodage(4, p_enc));
+
+	// On ajoute un A (01000001) dans le code, on veut vérifier l'ajout :
+	char c[ASCII_SIZE + 1] = {0};
+	c[ASCII_SIZE] = '\0';
 	code_ascii('A', c);
+	assert(strcmp(c, "01000001") == 0);
+	append_encodage(c, p_enc);
 
-	for (int i = 0; i < ASCII_SIZE; i++)
-	{
-		printf("%c", c[i]);
-	}
+	// On veut voir la chaine obtenue :
+	print_encodage(p_enc);
+	assert(strcmp(s_encodage(p_enc), "0000101000001") == 0);
+
+	destruct_encodage(p_enc);
 
 	return 0;
 }
