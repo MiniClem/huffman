@@ -49,20 +49,20 @@ void print_encodage(p_encodage enc)
 	}
 }
 
-// void create_code(Arbre a, int i, p_encodage enc)
-// {
-// 	if (!est_feuille(a))
-// 	{
-// 		enc->s_enc[i] = 0;
-// 		create_code(fils_gauche(a), i + 1, enc);
-// 		enc->s_enc[i] = 1;
-// 		create_code(fils_droit(a), i + 1, enc);
-// 	}
-// 	else
-// 	{
-// 		append_encodage(code_ascii(racine(a)), enc);
-// 	}
-// }
+void create_code(Arbre a, int i, p_encodage enc)
+{
+	if (!est_feuille(a))
+	{
+		append_encodage('0',enc);
+		create_code(fils_gauche(a), i + 1, enc);
+		create_code(fils_droit(a), i + 1, enc);
+	}
+	else
+	{
+		append_encodage('1',enc);
+		append_encodage(code_ascii(racine(a)), enc);
+	}
+}
 
 void binaire(int entier, char s[ASCII_SIZE])
 {
