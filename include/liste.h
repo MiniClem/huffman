@@ -2,7 +2,7 @@
 #include <assert.h>
 
 // Poiteur sur quelque chose
-typedef void *Elt;
+typedef char Elt;
 
 struct Maillon
 {

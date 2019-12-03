@@ -1,25 +1,50 @@
 #include "../include/arbre.h"
 
-Arbre creer_arbre(Elt x, Arbre fg, Arbre fd)
+Arbre creer_arbre(Elt x, int poid, Arbre fg, Arbre fd)
 {
 	Noeud *nouveau;
 
 	nouveau = (Noeud *)malloc(sizeof(Noeud));
 	nouveau->elt = x;
+	nouveau->poid = poid;
 	nouveau->fils_gauche = fg;
 	nouveau->fils_droit = fd;
 
 	return nouveau;
 }
 
-Elt racine(Arbre a);
-Arbre fils_gauche(Arbre a);
-Arbre fils_droit(Arbre a);
-int est_feuille(Arbre a);
+Elt racine(Arbre a)
+{
+	return a->elt;
+}
+
+int poid(Arbre a)
+{
+	return a->poid;
+}
 
 int est_arbre_vide(Arbre a)
 {
 	return a == NULL ? 1 : 0;
+}
+
+int est_feuille(Arbre a)
+{
+	return est_arbre_vide(fils_gauche(a)) && est_arbre_vide(fils_droit(a)) ? 1 : 0;
+}
+
+Arbre fils_gauche(Arbre a)
+{
+	assert(a != NULL);
+
+	return fils_gauche(a);
+}
+
+Arbre fils_droit(Arbre a)
+{
+	assert(a != NULL);
+
+	return fils_droit(a);
 }
 
 Arbre detruire_arbre(Arbre a)
