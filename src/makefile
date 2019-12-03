@@ -8,11 +8,11 @@ IDIR = ../include
 ODIR = obj
 
 # Ajouter les .h dans _DEPS puis décommenter les 2 lignes
-_DEPS = 
+_DEPS = liste.h liste_ext.h arbre.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
 # Les fichiers objets
-_OBJ = main.o 
+_OBJ = main.o liste.o liste_ext.o arbre.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 # Compile tous les fichiers sources 
