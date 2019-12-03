@@ -77,6 +77,7 @@ void prof_prefixe(Arbre a, void action(Arbre))
 	}
 }
 
+// Include file si nécessaire
 // void largeur(Arbre a, void action(Arbre))
 // {
 // 	Arbre aa;
