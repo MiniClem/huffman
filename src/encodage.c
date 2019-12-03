@@ -8,6 +8,13 @@ p_encodage create_encodage()
 	return enc;
 }
 
+void destruct_encodage(p_encodage enc){
+	if(enc){
+		free(enc->s_enc);
+		enc->s_enc = NULL;
+	}
+}
+
 char *s_encodage(p_encodage enc)
 {
 	return enc->s_enc;
@@ -53,13 +60,13 @@ void create_code(Arbre a, int i, p_encodage enc)
 {
 	if (!est_feuille(a))
 	{
-		append_encodage('0',enc);
+		append_encodage("0",enc);
 		create_code(fils_gauche(a), i + 1, enc);
 		create_code(fils_droit(a), i + 1, enc);
 	}
 	else
 	{
-		append_encodage('1',enc);
+		append_encodage("1",enc);
 		append_encodage(code_ascii(racine(a)), enc);
 	}
 }

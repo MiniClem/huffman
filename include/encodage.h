@@ -21,6 +21,11 @@ p_encodage create_encodage();
  */
 int cursor(p_encodage enc);
 
+/* 
+ * Libere l'encodage
+ */
+void destruct_encodage(p_encodage enc);
+
 /**
  * @brief Récupère la chaine de caractère actuellement déjà encodée de l'encodage donné
  * @param enc : L'encodage duquel récupérer la chaine déjà encodée
