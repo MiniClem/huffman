@@ -4,6 +4,8 @@
 #include <string.h>
 #include <math.h>
 
+#define ASCII_SIZE 8
+
 // TBD
 typedef struct encodage
 {
@@ -34,6 +36,8 @@ char charAt_encodage(int i, p_encodage enc);
  * @param enc : L'encodage qui se verra append
  */
 void append_encodage(char *chaine, p_encodage enc);
+
+void code_ascii(char, char[ASCII_SIZE]);
 
 void print_encodage(p_encodage enc);
 

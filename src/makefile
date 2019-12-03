@@ -11,6 +11,8 @@ ODIR = obj
 _DEPS = liste.h liste_ext.h arbre.h encodage.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
+LIBS=-lm	
+
 # Les fichiers objets
 _OBJ = main.o liste.o liste_ext.o arbre.o encodage.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))

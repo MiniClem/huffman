@@ -64,16 +64,16 @@ void print_encodage(p_encodage enc)
 // 	}
 // }
 
-void binaire(int entier, char s[9])
+void binaire(int entier, char s[ASCII_SIZE])
 {
-	int pt = 8;
+	int pt = 0;
 	int puissance;
 
 	/*
 	* On passe en revue chaque 2^i pour savoir si un le bit i
 	* peut être égal à 0 ou 1. On commence par le bit de poid fort.
 	*/
-	for (int i = 9 - 1; i >= 0; i--)
+	for (int i = ASCII_SIZE - 1; i >= 0; i--)
 	{
 		puissance = pow(2, i);
 
@@ -82,27 +82,28 @@ void binaire(int entier, char s[9])
 		// dans le reste et donc le nombre à écrire est plus grand ou égal que celle-ci.
 		if ((entier - puissance) >= 0)
 		{
-			s[pt--] = '1';
+			s[pt++] = '1';
 			entier -= puissance;
 		}
 		else
 		{
-			s[pt--] = '0';
+			s[pt++] = '0';
 		}
 	}
 }
-// char code_ascii(char c)
-// {
-// 	return ((int)c)
-// }
+
+void code_ascii(char c, char *c_tab)
+{
+	binaire((int)c, c_tab);
+}
 
 int main()
 {
-	char c[9];
+	char c[ASCII_SIZE];
 
-	binaire(5, c);
+	code_ascii('A', c);
 
-	for (int i = 0; i < 9; i++)
+	for (int i = 0; i < ASCII_SIZE; i++)
 	{
 		printf("%c", c[i]);
 	}
