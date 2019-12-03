@@ -10,10 +10,15 @@ p_encodage create_encodage()
 
 void destruct_encodage(p_encodage enc)
 {
-	if (enc)
+	if (enc && enc->s_enc)
 	{
 		free(enc->s_enc);
 		enc->s_enc = NULL;
+	}
+
+	if (enc)
+	{
+		free(enc);
 	}
 }
 
