@@ -43,6 +43,40 @@ void detruire_liste_arbre(Arbre *t_noeud, int size)
 	}
 }
 
+int trouver_duo_arbre_min(Arbre *a, Arbre *b, Arbre *l, int size)
+{
+	*a = NULL;
+	*b = NULL;
+
+	for (int i = 0; i < size; i++)
+	{
+		if (*a == NULL || (*b != NULL && l[i]->poid < (*a)->poid))
+		{
+			if (*b != NULL && (*a)->poid < (*b)->poid)
+			{
+				*b = *a;
+			}
+
+			*a = l[i];
+
+			assert(*a != *b);
+		}
+		else if (*b == NULL || l[i]->poid < (*b)->poid)
+		{
+			*b = l[i];
+		}
+	}
+
+	return *a != NULL && *b != NULL ? 1 : 0;
+}
+
+void combiner_arbres(Arbre a, Arbre b, Arbre *l)
+{
+	assert(a != NULL && b != NULL);
+
+	a = creer_arbre('\0', a->poid + b->poid, a, b);
+}
+
 p_encodage create_encodage()
 {
 	p_encodage enc = (p_encodage)malloc(sizeof(p_encodage));
@@ -186,9 +220,8 @@ int main()
 	p_encodage p_enc = create_encodage();
 
 	// Calculer la fréquence d'apparition des caractères d'un fichier :
-	char *text = "void code_ascii(char c, char *c_tab){binaire((int)c, c_tab);}";
-	int *p_frequence = t_frequences(p_enc);
-
+	char *text = "aaaabbbccd";
+	int *p_frequence = t_frequences(p_enc); // Récupère l'adresse
 	frequences(text, p_frequence);
 	for (int i = 0; i < 255; i++)
 	{
@@ -206,6 +239,11 @@ int main()
 	{
 		printf("'%c' : %d\n", t_noeuds[i]->elt, t_noeuds[i]->poid);
 	}
+
+	// On cherche les candidats pour le minimum
+	Arbre a = NULL, b = NULL;
+	trouver_duo_arbre_min(&a, &b, t_noeuds, size);
+	// printf("Les candidats mini sont : %d et %d\n", a->poid, b->poid);
 
 	// On désalloue l'arbre, pas besoin de lui pour le moment
 	detruire_liste_arbre(t_noeuds, size);
