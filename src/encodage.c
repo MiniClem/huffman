@@ -5,6 +5,7 @@ p_encodage create_encodage()
 	p_encodage enc = (p_encodage)malloc(sizeof(p_encodage));
 	enc->s_enc = (char *)malloc(sizeof(char));
 	enc->s_enc[0] = '\0';
+	enc->tab_frequences = (int *)calloc(255, sizeof(int));
 	return enc;
 }
 
@@ -14,6 +15,12 @@ void destruct_encodage(p_encodage enc)
 	{
 		free(enc->s_enc);
 		enc->s_enc = NULL;
+	}
+
+	if (enc && enc->tab_frequences)
+	{
+		free(enc->tab_frequences);
+		enc->tab_frequences = NULL;
 	}
 
 	if (enc)
@@ -30,6 +37,11 @@ char *s_encodage(p_encodage enc)
 int cursor(p_encodage enc)
 {
 	return strlen(s_encodage(enc));
+}
+
+int *t_frequences(p_encodage enc)
+{
+	return enc->tab_frequences;
 }
 
 char charAt_encodage(int i, p_encodage enc)
@@ -132,13 +144,14 @@ int main()
 
 	// Calculer la fréquence d'apparition des caractères d'un fichier :
 	char *text = "void code_ascii(char c, char *c_tab){binaire((int)c, c_tab);}";
-	int tab_frequence[255] = {0};
-	frequences(text, tab_frequence);
+	int *p_frequence = t_frequences(p_enc);
+
+	frequences(text, p_frequence);
 	for (int i = 0; i < 255; i++)
 	{
-		if (tab_frequence[i] != 0)
+		if (p_frequence[i] != 0)
 		{
-			printf("'%c' : %d\n", (char)i, tab_frequence[i]);
+			printf("'%c' : %d\n", (char)i, p_frequence[i]);
 		}
 	}
 

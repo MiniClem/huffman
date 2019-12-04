@@ -11,6 +11,7 @@
 typedef struct encodage
 {
 	char *s_enc;
+	int *tab_frequences;
 } * p_encodage;
 
 p_encodage create_encodage();
@@ -33,6 +34,12 @@ void destruct_encodage(p_encodage enc);
  * @return Une chaine de caractère contenant l'encodage 
  */
 char *s_encodage(p_encodage enc);
+
+/**
+ * @brief Récupère la valeur des fréquences stockés dans la structure encodage
+ * @param enc : l'encodage que l'on souhaite
+ */
+int *t_frequences(p_encodage enc);
 
 /**
  * @return Renvoie le caractère à la position i de l'encodage 
