@@ -31,9 +31,9 @@ Arbre *creer_liste_arbre(p_encodage enc, int *size);
  */
 void detruire_liste_arbre(Arbre *t_noeud, int size);
 
-Arbre combiner_arbres(Arbre *a, Arbre *b, Arbre *l);
+int trouver_combiner(Arbre *l, int size);
 
-int trouver_duo_arbre_min(Arbre *a, Arbre *b, Arbre *l, int size);
+Arbre huffman_merge(Arbre *l, int size);
 
 /**
  * @brief Récupère l'index de position dans la chaine de caractère stocké par enc

@@ -43,41 +43,75 @@ void detruire_liste_arbre(Arbre *t_noeud, int size)
 	}
 }
 
-int trouver_duo_arbre_min(Arbre *a, Arbre *b, Arbre *l, int size)
+int trouver_combiner(Arbre *l, int size)
 {
-	*a = NULL;
-	*b = NULL;
+	int pos_a = 0, pos_b = 0;
+	Arbre a = NULL;
+	Arbre b = NULL;
 
+	// trouver minimum
 	for (int i = 0; i < size; i++)
 	{
-		if (*a == NULL || (*b != NULL && l[i]->poid < (*a)->poid))
+		if (l[i] != NULL)
 		{
-			if (*b != NULL && (*a)->poid < (*b)->poid)
+			if (a == NULL || (b != NULL && l[i]->poid < (a)->poid))
 			{
-				*b = *a;
+				if (b != NULL && (a)->poid < (b)->poid)
+				{
+					b = a;
+					pos_b = pos_a;
+				}
+
+				a = l[i];
+				pos_a = i;
+
+				assert(a != b);
 			}
-
-			*a = l[i];
-
-			assert(*a != *b);
-		}
-		else if (*b == NULL || l[i]->poid < (*b)->poid)
-		{
-			*b = l[i];
+			else if (b == NULL || l[i]->poid < (b)->poid)
+			{
+				b = l[i];
+				pos_b = i;
+			}
 		}
 	}
 
-	return *a != NULL && *b != NULL ? 1 : 0;
+	if (!(a != NULL && b != NULL))
+	{
+		// Indique la fin du traitement de la liste
+		return 0;
+	}
+
+	// Combiner les 2 arbres
+	Arbre new_a = malloc(sizeof(Arbre));
+	memcpy(new_a, a, sizeof(*a));
+	a->elt = '\0';
+	a->fils_gauche = new_a;
+	a->fils_droit = b;
+	a->poid = a->poid + b->poid;
+	// La liste exclue le deuxième élément, on réduit la liste
+	l[pos_b] = NULL;
+
+	return 1;
 }
 
-Arbre combiner_arbres(Arbre *a, Arbre *b, Arbre *l)
+Arbre huffman_merge(Arbre *l, int size)
 {
-	assert(*a != NULL || *b != NULL);
+	int is_working = 1;
 
-	Arbre new_a = creer_arbre('\0', (*a)->poid + (*b)->poid, *a, *b);
-	*a = NULL;
-	*b = NULL;
-	return new_a;
+	do
+	{
+		is_working = trouver_combiner(l, size);
+	} while (is_working);
+
+	for (int i = 0; i < size; i++)
+	{
+		if (l[i] != NULL)
+		{
+			return l[i];
+		}
+	}
+
+	return NULL;
 }
 
 p_encodage create_encodage()
@@ -216,7 +250,6 @@ void code_ascii(char c, char *c_tab)
 	binaire((int)c, c_tab);
 }
 
-/*
 // TESTS
 int main()
 {
@@ -243,12 +276,11 @@ int main()
 		printf("'%c' : %d\n", t_noeuds[i]->elt, t_noeuds[i]->poid);
 	}
 
-	// On cherche les candidats pour le minimum
-	Arbre a = NULL, b = NULL, new_a = NULL;
-	trouver_duo_arbre_min(&a, &b, t_noeuds, size);
-	new_a = combiner_arbres(&a, &b, t_noeuds);
-	assert(new_a->poid == 3);
-	// printf("Les candidats mini sont : %d et %d\n", a->poid, b->poid);
+	// On cherche les candidats pour le minimum et on réalise Huffman
+	Arbre final = huffman_merge(t_noeuds, size);
+	assert(final->poid == 10);
+	assert(final->fils_droit->poid == 6);
+	assert(final->fils_gauche->poid == 4);
 
 	// On désalloue l'arbre, pas besoin de lui pour le moment
 	detruire_liste_arbre(t_noeuds, size);
@@ -280,4 +312,3 @@ int main()
 
 	return 0;
 }
-*/
