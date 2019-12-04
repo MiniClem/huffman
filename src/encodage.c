@@ -168,13 +168,16 @@ void append_encodage(char *chaine, p_encodage enc)
 {
 	// Point d'amélioration, utiliser une allocation dynamique de mémoire et utiliser memcpy pour ajouter des éléments
 	int length_enc = strlen(s_encodage(enc));
-	int length = strlen(chaine) + 1;
+	int length = strlen(chaine);
 
 	// Créer un nouvel espace mémoire qui peut contenir toutes les chaines
-	char *s_new_encodage = (char *)malloc(length_enc + length);
-	memcpy(s_new_encodage, s_encodage(enc), length_enc);
-	memcpy(s_new_encodage + length_enc, chaine, length);
+	char *s_new_encodage = (char *)calloc(length_enc + length, sizeof(char));
 
+	// Copie les contenus
+	strcpy(s_new_encodage, s_encodage(enc));
+	strcpy(s_new_encodage + length_enc, chaine);
+
+	// Désalloue l'ancien pointeur
 	free(enc->s_enc);
 	enc->s_enc = s_new_encodage;
 }
