@@ -185,6 +185,7 @@ void append_encodage(char *chaine, p_encodage enc)
 void print_encodage(p_encodage enc)
 {
 	int length = strlen(enc->s_enc);
+	printf("Taille de l'encodage : %d\n", length);
 
 	for (int i = 0; i < length; i++)
 	{
@@ -194,20 +195,32 @@ void print_encodage(p_encodage enc)
 	printf("\n");
 }
 
-void create_code(Arbre a, int i, p_encodage enc)
+void create_code_arbre(Arbre a, p_encodage enc)
 {
 	if (!est_feuille(a))
 	{
 		append_encodage("0", enc);
-		create_code(fils_gauche(a), i + 1, enc);
-		create_code(fils_droit(a), i + 1, enc);
+		create_code_arbre(fils_gauche(a), enc);
+		create_code_arbre(fils_droit(a), enc);
 	}
 	else
 	{
 		append_encodage("1", enc);
-		char c[ASCII_SIZE] = {0};
+		char c[ASCII_SIZE] = {'0'};
 		code_ascii(racine(a), c);
 		append_encodage(c, enc);
+	}
+}
+
+void create_code_texte(Arbre dico, p_encodage enc, char *m)
+{
+	int length = strlen(m);
+	char code[32] = {0};
+
+	for (int i = 0; i < length; i++)
+	{
+		rechercher_encodage(dico, m[i], code, 0);
+		append_encodage(code, enc);
 	}
 }
 
@@ -229,7 +242,7 @@ void binaire(int entier, char s[ASCII_SIZE])
 	* On passe en revue chaque 2^i pour savoir si un le bit i
 	* peut être égal à 0 ou 1. On commence par le bit de poid fort.
 	*/
-	for (int i = ASCII_SIZE - 1; i >= 0; i--)
+	for (int i = ASCII_SIZE - 2; i >= 0; i--)
 	{
 		puissance = pow(2, i);
 
@@ -246,6 +259,7 @@ void binaire(int entier, char s[ASCII_SIZE])
 			s[pt++] = '0';
 		}
 	}
+	s[pt] = '\0';
 }
 
 void code_ascii(char c, char *c_tab)
