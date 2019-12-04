@@ -51,7 +51,7 @@ Arbre detruire_arbre(Arbre a)
 {
 	if (!est_arbre_vide(a))
 	{
-		printf("Destruction arbre..\n");
+		// printf("Destruction arbre..\n");
 
 		if (!est_arbre_vide(fils_gauche(a)))
 		{
@@ -64,6 +64,7 @@ Arbre detruire_arbre(Arbre a)
 		}
 
 		free(a);
+		a = NULL;
 	}
 
 	return NULL;
