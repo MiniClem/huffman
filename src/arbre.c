@@ -37,22 +37,32 @@ Arbre fils_gauche(Arbre a)
 {
 	assert(a != NULL);
 
-	return fils_gauche(a);
+	return a->fils_gauche;
 }
 
 Arbre fils_droit(Arbre a)
 {
 	assert(a != NULL);
 
-	return fils_droit(a);
+	return a->fils_droit;
 }
 
 Arbre detruire_arbre(Arbre a)
 {
 	if (!est_arbre_vide(a))
 	{
-		detruire_arbre(fils_gauche(a));
-		detruire_arbre(fils_droit(a));
+		printf("Destruction arbre..\n");
+
+		if (!est_arbre_vide(fils_gauche(a)))
+		{
+			detruire_arbre(fils_gauche(a));
+		}
+
+		if (!est_arbre_vide(fils_droit(a)))
+		{
+			detruire_arbre(fils_droit(a));
+		}
+
 		free(a);
 	}
 
