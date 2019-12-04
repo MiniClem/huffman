@@ -82,6 +82,15 @@ void create_code(Arbre a, int i, p_encodage enc)
 	}
 }
 
+void frequences(char *m, int tab_frequence[255])
+{
+	int length = strlen(m);
+	for (int i = 0; i < length; i++)
+	{
+		tab_frequence[(unsigned int)m[i]]++;
+	}
+}
+
 void binaire(int entier, char s[ASCII_SIZE])
 {
 	int pt = 0;
@@ -114,11 +123,24 @@ void code_ascii(char c, char *c_tab)
 {
 	binaire((int)c, c_tab);
 }
+
 /*
 // TESTS
 int main()
 {
 	p_encodage p_enc = create_encodage();
+
+	// Calculer la fréquence d'apparition des caractères d'un fichier :
+	char *text = "void code_ascii(char c, char *c_tab){binaire((int)c, c_tab);}";
+	int tab_frequence[255] = {0};
+	frequences(text, tab_frequence);
+	for (int i = 0; i < 255; i++)
+	{
+		if (tab_frequence[i] != 0)
+		{
+			printf("'%c' : %d\n", (char)i, tab_frequence[i]);
+		}
+	}
 
 	// On imagine un début de suite telle que :
 	append_encodage("00001", p_enc);
@@ -146,4 +168,5 @@ int main()
 	destruct_encodage(p_enc);
 
 	return 0;
-}*/
+}
+*/

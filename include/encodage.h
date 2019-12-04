@@ -34,6 +34,9 @@ void destruct_encodage(p_encodage enc);
  */
 char *s_encodage(p_encodage enc);
 
+/**
+ * @return Renvoie le caractère à la position i de l'encodage 
+ */
 char charAt_encodage(int i, p_encodage enc);
 
 /**
@@ -43,7 +46,14 @@ char charAt_encodage(int i, p_encodage enc);
  */
 void append_encodage(char *chaine, p_encodage enc);
 
-void code_ascii(char, char[ASCII_SIZE]);
+/**
+ * @brief Converti un char en son homologue binaire
+ * @param carac : le caractère à convertir en binaire
+ * @param tab_bin : le tableau qui contiendra les bits correspondant du caractère.
+ */
+void code_ascii(char carac, char tab_bin[ASCII_SIZE]);
+
+void frequences(char *, int tab_frequence[255]);
 
 void print_encodage(p_encodage enc);
 
