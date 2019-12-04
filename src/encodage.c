@@ -278,9 +278,19 @@ int main()
 
 	// On cherche les candidats pour le minimum et on réalise Huffman
 	Arbre final = huffman_merge(t_noeuds, size);
+	char code_c[56] = {0};
 	assert(final->poid == 10);
 	assert(final->fils_droit->poid == 6);
 	assert(final->fils_gauche->poid == 4);
+	// printf("valeur de 11 %c", final->fils_droit->fils_droit->elt);
+
+	Arbre a = creer_arbre('a', 1, NULL, NULL);
+	Arbre b01 = creer_arbre('b', 1, NULL, NULL);
+	Arbre b02 = creer_arbre('c', 1, NULL, NULL);
+	Arbre b = creer_arbre('\0', 1, b01, b02);
+	Arbre o = creer_arbre('\0', 2, a, b);
+	rechercher_encodage(o, 'b', code_c, 0);
+	printf("code pour 'b' : %s\n", code_c);
 
 	// On désalloue l'arbre, pas besoin de lui pour le moment
 	detruire_liste_arbre(t_noeuds, size);
