@@ -70,11 +70,14 @@ int trouver_duo_arbre_min(Arbre *a, Arbre *b, Arbre *l, int size)
 	return *a != NULL && *b != NULL ? 1 : 0;
 }
 
-void combiner_arbres(Arbre a, Arbre b, Arbre *l)
+Arbre combiner_arbres(Arbre *a, Arbre *b, Arbre *l)
 {
-	assert(a != NULL && b != NULL);
+	assert(*a != NULL || *b != NULL);
 
-	a = creer_arbre('\0', a->poid + b->poid, a, b);
+	Arbre new_a = creer_arbre('\0', (*a)->poid + (*b)->poid, *a, *b);
+	*a = NULL;
+	*b = NULL;
+	return new_a;
 }
 
 p_encodage create_encodage()
@@ -241,8 +244,10 @@ int main()
 	}
 
 	// On cherche les candidats pour le minimum
-	Arbre a = NULL, b = NULL;
+	Arbre a = NULL, b = NULL, new_a = NULL;
 	trouver_duo_arbre_min(&a, &b, t_noeuds, size);
+	new_a = combiner_arbres(&a, &b, t_noeuds);
+	assert(new_a->poid == 3);
 	// printf("Les candidats mini sont : %d et %d\n", a->poid, b->poid);
 
 	// On désalloue l'arbre, pas besoin de lui pour le moment
