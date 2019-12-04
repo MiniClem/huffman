@@ -17,13 +17,28 @@ typedef struct encodage
 p_encodage create_encodage();
 
 /**
+ * @brief Crée une liste d'arbre à partir des fréquences contenues dans l'encodage
+ * @param enc : L'encodage à utiliser
+ * @param size : Un int donnée résultat pour stocker la taille de la liste créée
+ * @return La liste d'Arbre créée
+ */
+Arbre *creer_liste_arbre(p_encodage enc, int *size);
+
+/**
+ * @brief Désalloue la liste d'arbre
+ * @param t_noeud : La liste à détruire
+ * @param size : La taille de la liste
+ */
+void detruire_liste_arbre(Arbre *t_noeud, int size);
+
+/**
  * @brief Récupère l'index de position dans la chaine de caractère stocké par enc
  * @return L'index de position, par exemple si la chaine vient d'être créée, la fonction renverra 
  * 1 car le caractère '0\' est présente.
  */
 int cursor(p_encodage enc);
 
-/* 
+/** 
  * Libere l'encodage
  */
 void destruct_encodage(p_encodage enc);

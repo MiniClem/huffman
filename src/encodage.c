@@ -1,5 +1,48 @@
 #include "../include/encodage.h"
 
+Arbre *creer_liste_arbre(p_encodage enc, int *size)
+{
+	int j = 0;
+
+	// On calcule le nombre de valeurs non nulle
+	for (int i = 0; i < 255; i++)
+	{
+		if (enc->tab_frequences[i] != 0)
+		{
+			*size += 1;
+		}
+	}
+
+	// Allocation de la mémoire pour le tableau de noeud
+	Arbre *t_noeud = (Arbre *)calloc(*size, sizeof(Arbre));
+
+	// On place les variables de fréquence dans un noeud
+	for (int i = 0; i < 255; i++)
+	{
+		// On passe si la valeur est nulle
+		if (enc->tab_frequences[i] != 0)
+		{
+			Arbre n = creer_arbre((char)i, enc->tab_frequences[i], NULL, NULL);
+			t_noeud[j++] = n;
+		}
+	}
+
+	return t_noeud;
+}
+
+void detruire_liste_arbre(Arbre *t_noeud, int size)
+{
+	if (t_noeud)
+	{
+		for (int i = 0; i < size; i++)
+		{
+			detruire_arbre(t_noeud[i]);
+		}
+
+		free(t_noeud);
+	}
+}
+
 p_encodage create_encodage()
 {
 	p_encodage enc = (p_encodage)malloc(sizeof(p_encodage));
@@ -136,7 +179,6 @@ void code_ascii(char c, char *c_tab)
 	binaire((int)c, c_tab);
 }
 
-/*
 // TESTS
 int main()
 {
@@ -154,6 +196,18 @@ int main()
 			printf("'%c' : %d\n", (char)i, p_frequence[i]);
 		}
 	}
+
+	// On crée une liste de noeud qui plus tard sera un arbre
+	int size = 0;
+	Arbre *t_noeuds = creer_liste_arbre(p_enc, &size);
+	printf("Arbres : \n");
+	for (int i = 0; i < size; i++)
+	{
+		printf("'%c' : %d\n", t_noeuds[i]->elt, t_noeuds[i]->poid);
+	}
+
+	// On désalloue l'arbre, pas besoin de lui pour le moment
+	detruire_liste_arbre(t_noeuds, size);
 
 	// On imagine un début de suite telle que :
 	append_encodage("00001", p_enc);
@@ -182,4 +236,3 @@ int main()
 
 	return 0;
 }
-*/
