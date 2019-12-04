@@ -5,7 +5,7 @@
 #include <string.h>
 #include <math.h>
 
-#define ASCII_SIZE 8
+#define ASCII_SIZE 9
 
 // TBD
 typedef struct encodage
@@ -79,10 +79,14 @@ void append_encodage(char *chaine, p_encodage enc);
  */
 void code_ascii(char carac, char tab_bin[ASCII_SIZE]);
 
+void binaire(int entier, char s[ASCII_SIZE]);
+
 void frequences(char *, int tab_frequence[255]);
 
 void print_encodage(p_encodage enc);
 
-void create_code(Arbre a, int i, p_encodage enc);
+void create_code_arbre(Arbre a, p_encodage enc);
+
+void create_code_texte(Arbre dico, p_encodage enc, char *m);
 
 #endif
