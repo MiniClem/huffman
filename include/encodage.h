@@ -1,6 +1,7 @@
 #ifndef __encodage_h__
 #define __encodage_h__
 #include "arbre.h"
+#include <stdlib.h>
 #include <string.h>
 #include <math.h>
 
@@ -20,6 +21,11 @@ p_encodage create_encodage();
  * 1 car le caractère '0\' est présente.
  */
 int cursor(p_encodage enc);
+
+/* 
+ * Libere l'encodage
+ */
+void destruct_encodage(p_encodage enc);
 
 /**
  * @brief Récupère la chaine de caractère actuellement déjà encodée de l'encodage donné
