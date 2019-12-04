@@ -114,7 +114,7 @@ void code_ascii(char c, char *c_tab)
 {
 	binaire((int)c, c_tab);
 }
-
+/*
 // TESTS
 int main()
 {
@@ -146,4 +146,4 @@ int main()
 	destruct_encodage(p_enc);
 
 	return 0;
-}
+}*/
