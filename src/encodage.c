@@ -267,75 +267,99 @@ void code_ascii(char c, char *c_tab)
 	binaire((int)c, c_tab);
 }
 
+/*
 // TESTS
 int main()
 {
-	p_encodage p_enc = create_encodage();
-
-	// Calculer la fréquence d'apparition des caractères d'un fichier :
-	char *text = "aaaabbbccd";
-	int *p_frequence = t_frequences(p_enc); // Récupère l'adresse
-	frequences(text, p_frequence);
-	for (int i = 0; i < 255; i++)
-	{
-		if (p_frequence[i] != 0)
-		{
-			printf("'%c' : %d\n", (char)i, p_frequence[i]);
-		}
-	}
-
-	// On crée une liste de noeud qui plus tard sera un arbre
+	// Test réel
+	char *c = "aaaabbbccd";
 	int size = 0;
-	Arbre *t_noeuds = creer_liste_arbre(p_enc, &size);
-	printf("Arbres : \n");
-	for (int i = 0; i < size; i++)
-	{
-		printf("'%c' : %d\n", t_noeuds[i]->elt, t_noeuds[i]->poid);
-	}
+	Arbre *t_arbre;
+	Arbre final;
 
-	// On cherche les candidats pour le minimum et on réalise Huffman
-	Arbre final = huffman_merge(t_noeuds, size);
-	char code_c[56] = {0};
-	assert(final->poid == 10);
-	assert(final->fils_droit->poid == 6);
-	assert(final->fils_gauche->poid == 4);
-	// printf("valeur de 11 %c", final->fils_droit->fils_droit->elt);
+	p_encodage p_enc = create_encodage();
+	frequences(c, t_frequences(p_enc));
 
-	Arbre a = creer_arbre('a', 1, NULL, NULL);
-	Arbre b01 = creer_arbre('b', 1, NULL, NULL);
-	Arbre b02 = creer_arbre('c', 1, NULL, NULL);
-	Arbre b = creer_arbre('\0', 1, b01, b02);
-	Arbre o = creer_arbre('\0', 2, a, b);
-	rechercher_encodage(o, 'b', code_c, 0);
-	printf("code pour 'b' : %s\n", code_c);
+	t_arbre = creer_liste_arbre(p_enc, &size);
+	final = huffman_merge(t_arbre, size);
 
-	// On désalloue l'arbre, pas besoin de lui pour le moment
-	detruire_liste_arbre(t_noeuds, size);
-
-	// On imagine un début de suite telle que :
-	append_encodage("00001", p_enc);
-
-	// Le contenu dans encodage est le même :
-	assert(strcmp(s_encodage(p_enc), "00001") == 0);
-
-	// Le curseur est bien placé sur le '\0' :
-	assert(cursor(p_enc) == 5);
-
-	// On veut vérifier que l'on trouve bien le 1 à la position 4 :
-	assert(charAt_encodage(4, p_enc));
-
-	// On ajoute un A (01000001) dans le code, on veut vérifier l'ajout :
-	char c[ASCII_SIZE + 1] = {0};
-	c[ASCII_SIZE] = '\0';
-	code_ascii('A', c);
-	assert(strcmp(c, "01000001") == 0);
-	append_encodage(c, p_enc);
-
-	// On veut voir la chaine obtenue :
+	create_code_arbre(final, p_enc);
 	print_encodage(p_enc);
-	assert(strcmp(s_encodage(p_enc), "0000101000001") == 0);
+	create_code_texte(final, p_enc, c);
+	print_encodage(p_enc);
 
 	destruct_encodage(p_enc);
+	// detruire_liste_arbre(t_arbre, size); // A verifier <------
+	detruire_arbre(final);
+	// Test réel
+
+	// p_encodage p_enc = create_encodage();
+
+	// // Calculer la fréquence d'apparition des caractères d'un fichier :
+	// char *text = "cagataagagaa";
+	// int *p_frequence = t_frequences(p_enc); // Récupère l'adresse
+	// frequences(text, p_frequence);
+	// for (int i = 0; i < 255; i++)
+	// {
+	// 	if (p_frequence[i] != 0)
+	// 	{
+	// 		printf("'%c' : %d\n", (char)i, p_frequence[i]);
+	// 	}
+	// }
+
+	// // On crée une liste de noeud qui plus tard sera un arbre
+	// int size = 0;
+	// Arbre *t_noeuds = creer_liste_arbre(p_enc, &size);
+	// printf("Arbres : \n");
+	// for (int i = 0; i < size; i++)
+	// {
+	// 	printf("'%c' : %d\n", t_noeuds[i]->elt, t_noeuds[i]->poid);
+	// }
+
+	// // On cherche les candidats pour le minimum et on réalise Huffman
+	// Arbre final = huffman_merge(t_noeuds, size);
+	// char code_c[56] = {0};
+	// assert(final->poid == 10);
+	// assert(final->fils_droit->poid == 6);
+	// assert(final->fils_gauche->poid == 4);
+	// // printf("valeur de 11 %c", final->fils_droit->fils_droit->elt);
+
+	// Arbre a = creer_arbre('a', 1, NULL, NULL);
+	// Arbre b01 = creer_arbre('b', 1, NULL, NULL);
+	// Arbre b02 = creer_arbre('c', 1, NULL, NULL);
+	// Arbre b = creer_arbre('\0', 1, b01, b02);
+	// Arbre o = creer_arbre('\0', 2, a, b);
+	// rechercher_encodage(o, 'b', code_c, 0);
+	// printf("code pour 'b' : %s\n", code_c);
+
+	// // On désalloue l'arbre, pas besoin de lui pour le moment
+	// detruire_liste_arbre(t_noeuds, size);
+
+	// // On imagine un début de suite telle que :
+	// append_encodage("00001", p_enc);
+
+	// // Le contenu dans encodage est le même :
+	// assert(strcmp(s_encodage(p_enc), "00001") == 0);
+
+	// // Le curseur est bien placé sur le '\0' :
+	// assert(cursor(p_enc) == 5);
+
+	// // On veut vérifier que l'on trouve bien le 1 à la position 4 :
+	// assert(charAt_encodage(4, p_enc));
+
+	// // On ajoute un A (01000001) dans le code, on veut vérifier l'ajout :
+	// char c[ASCII_SIZE + 1] = {0};
+	// c[ASCII_SIZE] = '\0';
+	// code_ascii('A', c);
+	// assert(strcmp(c, "01000001") == 0);
+	// append_encodage(c, p_enc);
+
+	// // On veut voir la chaine obtenue :
+	// print_encodage(p_enc);
+	// assert(strcmp(s_encodage(p_enc), "0000101000001") == 0);
+
+	// destruct_encodage(p_enc);
 
 	return 0;
 }
+*/
