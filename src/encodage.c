@@ -5,6 +5,7 @@ Arbre *creer_liste_arbre(p_encodage enc, int *size)
 	Arbre *t_noeud;
 	Arbre n;
 	int *tab_frequence = enc->tab_frequences;
+	Arbre temp_noeuds[255] = {0};
 	int j = 0;
 
 	// On calcule le nombre de valeurs non nulle
@@ -12,23 +13,16 @@ Arbre *creer_liste_arbre(p_encodage enc, int *size)
 	{
 		if (tab_frequence[i] != 0)
 		{
+			n = creer_arbre((char)i, tab_frequence[i], NULL, NULL);
+			temp_noeuds[j++] = n;
 			*size += 1;
 		}
 	}
 
 	// Allocation de la mémoire pour le tableau de noeud
 	t_noeud = (Arbre *)calloc(*size, sizeof(Arbre));
-
-	// On place les variables de fréquence dans un noeud
-	for (int i = 0; i < 255; i++)
-	{
-		// On passe si la valeur est nulle
-		if (tab_frequence[i] != 0)
-		{
-			n = creer_arbre((char)i, tab_frequence[i], NULL, NULL);
-			t_noeud[j++] = n;
-		}
-	}
+	// Copie de la mémoire de temp jusqu'au final
+	memcpy(t_noeud, temp_noeuds, sizeof(Arbre *) * *size);
 
 	return t_noeud;
 }
