@@ -31,10 +31,9 @@ char *lire_caractere_fichier(FILE *file)
 char *char_to_byte(char char_to_convert)
 {
 	char *str = (char *)malloc(8 * sizeof(char));
-	int a = 128;
-	int i = 0;
+	int a = 128; // 0b10000000
 
-	for (i = 0; i < 8; i++)
+	for (int i = 0; i < 8; i++)
 	{
 		if (((int)char_to_convert & a) == 0)
 		{
