@@ -82,7 +82,7 @@ int trouver_combiner(Arbre *l, int size)
 	}
 
 	// Combiner les 2 arbres
-	Arbre new_a = malloc(sizeof(Arbre));
+	Arbre new_a = malloc(sizeof(Noeud));
 	memcpy(new_a, a, sizeof(*a));
 	a->elt = '\0';
 	a->fils_gauche = new_a;
@@ -116,10 +116,10 @@ Arbre huffman_merge(Arbre *l, int size)
 
 p_encodage create_encodage()
 {
-	p_encodage enc = (p_encodage)malloc(sizeof(p_encodage));
-	enc->s_enc = (char *)malloc(sizeof(char));
-	enc->s_enc[0] = '\0';
-	enc->tab_frequences = (int *)calloc(255, sizeof(int));
+	p_encodage enc = (p_encodage)malloc(sizeof(encodage));
+	enc->s_enc = malloc(sizeof(char));
+	(enc->s_enc)[0] = '\0';
+	enc->tab_frequences = malloc(255 * sizeof(int));
 	return enc;
 }
 
@@ -171,14 +171,14 @@ void append_encodage(char *chaine, p_encodage enc)
 	int length = strlen(chaine);
 
 	// Créer un nouvel espace mémoire qui peut contenir toutes les chaines
-	char *s_new_encodage = (char *)calloc(length_enc + length, sizeof(char));
+	char *s_new_encodage = (char *)calloc(length_enc + length + 2, sizeof(char));
 
 	// Copie les contenus
 	strcpy(s_new_encodage, s_encodage(enc));
 	strcpy(s_new_encodage + length_enc, chaine);
 
 	// Désalloue l'ancien pointeur
-	free(enc->s_enc);
+	free(s_encodage(enc));
 	enc->s_enc = s_new_encodage;
 }
 
@@ -267,14 +267,13 @@ void code_ascii(char c, char *c_tab)
 	binaire((int)c, c_tab);
 }
 
-/*
 // TESTS
 int main()
 {
 	// Test réel
-	char *c = "aaaabbbccd";
+	char *c = "aaaabbbccdaaaadddd";
 	int size = 0;
-	Arbre *t_arbre;
+	Arbre *t_arbre = NULL;
 	Arbre final;
 
 	p_encodage p_enc = create_encodage();
@@ -284,12 +283,13 @@ int main()
 	final = huffman_merge(t_arbre, size);
 
 	create_code_arbre(final, p_enc);
+
 	print_encodage(p_enc);
 	create_code_texte(final, p_enc, c);
 	print_encodage(p_enc);
 
 	destruct_encodage(p_enc);
-	// detruire_liste_arbre(t_arbre, size); // A verifier <------
+	detruire_liste_arbre(t_arbre, size); // A verifier <------
 	detruire_arbre(final);
 	// Test réel
 
@@ -362,4 +362,3 @@ int main()
 
 	return 0;
 }
-*/

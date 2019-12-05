@@ -53,12 +53,12 @@ Arbre detruire_arbre(Arbre a)
 	{
 		// printf("Destruction arbre..\n");
 
-		if (!est_arbre_vide(fils_gauche(a)))
+		if (a->fils_gauche != NULL)
 		{
 			detruire_arbre(fils_gauche(a));
 		}
 
-		if (!est_arbre_vide(fils_droit(a)))
+		if (a->fils_droit != NULL)
 		{
 			detruire_arbre(fils_droit(a));
 		}

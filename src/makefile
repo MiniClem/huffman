@@ -1,5 +1,6 @@
 CC = gcc
 CFLAGS = -Wall
+CTESTFLAGS = -g
 
 # Détermine où se trouvent les headers
 IDIR = ../include
@@ -26,7 +27,7 @@ $(ODIR)/%.o: %.c $(DEPS)
 
 # Le fichier éxécutable
 test_encodage: $(ENC_TEST_OBJ)
-	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+	$(CC) -o $@ $^ $(CTESTFLAGS) $(CFLAGS) $(LIBS)
 
 main: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)

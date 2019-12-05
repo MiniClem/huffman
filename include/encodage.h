@@ -12,7 +12,8 @@ typedef struct encodage
 {
 	char *s_enc;
 	int *tab_frequences;
-} * p_encodage;
+} encodage;
+typedef encodage *p_encodage;
 
 p_encodage create_encodage();
 
