@@ -2,27 +2,30 @@
 
 Arbre *creer_liste_arbre(p_encodage enc, int *size)
 {
+	Arbre *t_noeud;
+	Arbre n;
+	int *tab_frequence = enc->tab_frequences;
 	int j = 0;
 
 	// On calcule le nombre de valeurs non nulle
 	for (int i = 0; i < 255; i++)
 	{
-		if (enc->tab_frequences[i] != 0)
+		if (tab_frequence[i] != 0)
 		{
 			*size += 1;
 		}
 	}
 
 	// Allocation de la mémoire pour le tableau de noeud
-	Arbre *t_noeud = (Arbre *)calloc(*size, sizeof(Arbre));
+	t_noeud = (Arbre *)calloc(*size, sizeof(Arbre));
 
 	// On place les variables de fréquence dans un noeud
 	for (int i = 0; i < 255; i++)
 	{
 		// On passe si la valeur est nulle
-		if (enc->tab_frequences[i] != 0)
+		if (tab_frequence[i] != 0)
 		{
-			Arbre n = creer_arbre((char)i, enc->tab_frequences[i], NULL, NULL);
+			n = creer_arbre((char)i, tab_frequence[i], NULL, NULL);
 			t_noeud[j++] = n;
 		}
 	}
@@ -111,7 +114,7 @@ p_encodage create_encodage()
 {
 	p_encodage enc = (p_encodage)malloc(sizeof(encodage));
 	enc->s_enc = malloc(sizeof(char));
-	(enc->s_enc)[0] = '\0';
+	enc->s_enc[0] = '\0';
 	enc->dico = NULL;
 	enc->tab_frequences = calloc(255, sizeof(int));
 	return enc;
