@@ -10,6 +10,7 @@
 typedef struct encodage
 {
 	char *s_enc;
+	Arbre dico;
 	int *tab_frequences;
 } encodage;
 typedef encodage *p_encodage;
@@ -25,6 +26,8 @@ p_encodage create_encodage();
 Arbre *creer_liste_arbre(p_encodage enc, int *size);
 
 int trouver_combiner(Arbre *l, int size);
+
+Arbre huffman(p_encodage enc);
 
 Arbre huffman_merge(Arbre *l, int size);
 
@@ -74,7 +77,7 @@ void code_ascii(char carac, char tab_bin[ASCII_SIZE]);
 
 void binaire(int entier, char s[ASCII_SIZE]);
 
-void frequences(char *, int tab_frequence[255]);
+void frequences(char *, p_encodage enc);
 
 void print_encodage(p_encodage enc);
 

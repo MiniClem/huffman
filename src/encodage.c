@@ -80,6 +80,13 @@ int trouver_combiner(Arbre *l, int size)
 	return 1;
 }
 
+Arbre huffman(p_encodage enc)
+{
+	int size = 0;
+	Arbre *t_arbre = creer_liste_arbre(enc, &size);
+	enc->dico = huffman_merge(t_arbre, size);
+}
+
 Arbre huffman_merge(Arbre *l, int size)
 {
 	int is_working = 1;
@@ -105,6 +112,7 @@ p_encodage create_encodage()
 	p_encodage enc = (p_encodage)malloc(sizeof(encodage));
 	enc->s_enc = malloc(sizeof(char));
 	(enc->s_enc)[0] = '\0';
+	enc->dico = NULL;
 	enc->tab_frequences = calloc(255, sizeof(int));
 	return enc;
 }
@@ -210,12 +218,13 @@ void create_code_texte(Arbre dico, p_encodage enc, char *m)
 	}
 }
 
-void frequences(char *m, int tab_frequence[255])
+void frequences(char *m, p_encodage enc)
 {
+	int *tab_freq = t_frequences(enc);
 	int length = strlen(m);
 	for (int i = 0; i < length; i++)
 	{
-		tab_frequence[(unsigned int)m[i]]++;
+		tab_freq[(unsigned int)m[i]]++;
 	}
 }
 
@@ -263,17 +272,19 @@ int main()
 	Arbre final = NULL;
 
 	p_encodage p_enc = create_encodage();
-	frequences(c, t_frequences(p_enc));
+	frequences(c, p_enc);
 
-	t_arbre = creer_liste_arbre(p_enc, &size);
-	final = huffman_merge(t_arbre, size);
+	huffman(p_enc);
 
+	// Encodage dico
 	create_code_arbre(final, p_enc);
+	print_encodage(p_enc); // Affichage test
 
-	print_encodage(p_enc);
+	// Encodage message
 	create_code_texte(final, p_enc, c);
-	print_encodage(p_enc);
+	print_encodage(p_enc); // Affichage test
 
+	// Libération mémoire
 	destruct_encodage(p_enc);
 	detruire_arbre(final);
 	// Test réel
