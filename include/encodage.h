@@ -31,13 +31,6 @@ Arbre huffman(p_encodage enc);
 
 Arbre huffman_merge(Arbre *l, int size);
 
-/**
- * @brief Récupère l'index de position dans la chaine de caractère stocké par enc
- * @return L'index de position, par exemple si la chaine vient d'être créée, la fonction renverra 
- * 1 car le caractère '0\' est présente.
- */
-int cursor(p_encodage enc);
-
 /** 
  * Libere l'encodage
  */

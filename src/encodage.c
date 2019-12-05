@@ -142,11 +142,6 @@ char *s_encodage(p_encodage enc)
 	return enc->s_enc;
 }
 
-int cursor(p_encodage enc)
-{
-	return strlen(s_encodage(enc));
-}
-
 int *t_frequences(p_encodage enc)
 {
 	return enc->tab_frequences;
@@ -336,9 +331,6 @@ int main()
 
 	// // Le contenu dans encodage est le même :
 	// assert(strcmp(s_encodage(p_enc), "00001") == 0);
-
-	// // Le curseur est bien placé sur le '\0' :
-	// assert(cursor(p_enc) == 5);
 
 	// // On veut vérifier que l'on trouve bien le 1 à la position 4 :
 	// assert(charAt_encodage(4, p_enc));
