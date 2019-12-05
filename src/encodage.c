@@ -30,19 +30,6 @@ Arbre *creer_liste_arbre(p_encodage enc, int *size)
 	return t_noeud;
 }
 
-void detruire_liste_arbre(Arbre *t_noeud, int size)
-{
-	if (t_noeud)
-	{
-		for (int i = 0; i < size; i++)
-		{
-			detruire_arbre(t_noeud[i]);
-		}
-
-		free(t_noeud);
-	}
-}
-
 int trouver_combiner(Arbre *l, int size)
 {
 	int pos_a = 0, pos_b = 0;
@@ -75,15 +62,14 @@ int trouver_combiner(Arbre *l, int size)
 		}
 	}
 
-	if (!(a != NULL && b != NULL))
+	if (a == NULL || b == NULL)
 	{
 		// Indique la fin du traitement de la liste
 		return 0;
 	}
 
 	// Combiner les 2 arbres
-	Arbre new_a = malloc(sizeof(Noeud));
-	memcpy(new_a, a, sizeof(*a));
+	Arbre new_a = creer_arbre(a->elt, a->poid, a->fils_gauche, a->fils_droit);
 	a->elt = '\0';
 	a->fils_gauche = new_a;
 	a->fils_droit = b;
@@ -119,7 +105,7 @@ p_encodage create_encodage()
 	p_encodage enc = (p_encodage)malloc(sizeof(encodage));
 	enc->s_enc = malloc(sizeof(char));
 	(enc->s_enc)[0] = '\0';
-	enc->tab_frequences = malloc(255 * sizeof(int));
+	enc->tab_frequences = calloc(255, sizeof(int));
 	return enc;
 }
 
@@ -274,7 +260,7 @@ int main()
 	char *c = "aaaabbbccdaaaadddd";
 	int size = 0;
 	Arbre *t_arbre = NULL;
-	Arbre final;
+	Arbre final = NULL;
 
 	p_encodage p_enc = create_encodage();
 	frequences(c, t_frequences(p_enc));
@@ -289,7 +275,6 @@ int main()
 	print_encodage(p_enc);
 
 	destruct_encodage(p_enc);
-	detruire_liste_arbre(t_arbre, size); // A verifier <------
 	detruire_arbre(final);
 	// Test réel
 

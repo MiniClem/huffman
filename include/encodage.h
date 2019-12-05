@@ -7,7 +7,6 @@
 
 #define ASCII_SIZE 9
 
-// TBD
 typedef struct encodage
 {
 	char *s_enc;
@@ -24,13 +23,6 @@ p_encodage create_encodage();
  * @return La liste d'Arbre créée
  */
 Arbre *creer_liste_arbre(p_encodage enc, int *size);
-
-/**
- * @brief Désalloue la liste d'arbre
- * @param t_noeud : La liste à détruire
- * @param size : La taille de la liste
- */
-void detruire_liste_arbre(Arbre *t_noeud, int size);
 
 int trouver_combiner(Arbre *l, int size);
 
