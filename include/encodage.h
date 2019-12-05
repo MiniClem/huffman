@@ -27,7 +27,7 @@ Arbre *creer_liste_arbre(p_encodage enc, int *size);
 
 int trouver_combiner(Arbre *l, int size);
 
-Arbre huffman(p_encodage enc);
+void huffman(p_encodage enc);
 
 Arbre huffman_merge(Arbre *l, int size);
 
@@ -74,8 +74,8 @@ void frequences(char *, p_encodage enc);
 
 void print_encodage(p_encodage enc);
 
-void create_code_arbre(Arbre a, p_encodage enc);
+void create_code_arbre(Arbre dico, p_encodage enc);
 
-void create_code_texte(Arbre dico, p_encodage enc, char *m);
+void create_code_texte(p_encodage enc, char *m);
 
 #endif
