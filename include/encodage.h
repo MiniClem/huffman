@@ -10,6 +10,7 @@
 typedef struct encodage
 {
 	char *s_enc;
+	Arbre dico;
 	int *tab_frequences;
 } encodage;
 typedef encodage *p_encodage;
@@ -26,14 +27,9 @@ Arbre *creer_liste_arbre(p_encodage enc, int *size);
 
 int trouver_combiner(Arbre *l, int size);
 
-Arbre huffman_merge(Arbre *l, int size);
+void huffman(p_encodage enc);
 
-/**
- * @brief Récupère l'index de position dans la chaine de caractère stocké par enc
- * @return L'index de position, par exemple si la chaine vient d'être créée, la fonction renverra 
- * 1 car le caractère '0\' est présente.
- */
-int cursor(p_encodage enc);
+Arbre huffman_merge(Arbre *l, int size);
 
 /** 
  * Libere l'encodage
@@ -74,12 +70,12 @@ void code_ascii(char carac, char tab_bin[ASCII_SIZE]);
 
 void binaire(int entier, char s[ASCII_SIZE]);
 
-void frequences(char *, int tab_frequence[255]);
+void frequences(char *, p_encodage enc);
 
 void print_encodage(p_encodage enc);
 
-void create_code_arbre(Arbre a, p_encodage enc);
+void create_code_arbre(Arbre dico, p_encodage enc);
 
-void create_code_texte(Arbre dico, p_encodage enc, char *m);
+void create_code_texte(p_encodage enc, char *m);
 
 #endif
