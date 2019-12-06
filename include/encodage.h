@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include "../include/file.h"
 
 #define ASCII_SIZE 9
 
