@@ -1,5 +1,29 @@
 #include "../include/encodage.h"
 
+// COMPRESS
+byte **compress(char *m)
+{
+	byte **b = NULL;
+	int length = strlen(m);
+
+	// Aligne à 8 bits
+	int mod = length % 8;
+	if (mod != 0)
+	{
+		length += mod;
+	}
+
+	b = calloc(length, sizeof(byte));
+	for (int i = 0; i < length; i += 8)
+	{
+		*b[i / 8] = char_to_byte(m + i);
+	}
+
+	return b;
+}
+// COMPRESS
+
+// DICO
 Arbre *creer_liste_arbre(p_encodage enc, int *size)
 {
 	Arbre *t_noeud;
@@ -103,6 +127,7 @@ Arbre huffman_merge(Arbre *l, int size)
 
 	return NULL;
 }
+// DICO
 
 p_encodage create_encodage()
 {
@@ -279,6 +304,9 @@ int main()
 	// Encodage message
 	create_code_texte(p_enc, c);
 	print_encodage(p_enc); // Affichage test
+
+	// Compression
+	byte **b = compress(p_enc->s_enc);
 
 	// Libération mémoire
 	destruct_encodage(p_enc);
