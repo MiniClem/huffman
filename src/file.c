@@ -46,19 +46,19 @@ byte *char_to_byte(char char_to_convert)
 	return str;
 }
 
-char *byte_to_char(byte* char_to_convert)
+char *byte_to_char(byte *char_to_convert)
 {
 	char *str = (char *)calloc(1, sizeof(char));
 	int a = 128;
 
 	for (int i = 0; i < 8; i++)
 	{
-		if ( char_to_convert[i] == '1')
+		if (char_to_convert[i] == '1')
 		{
 			*str &= a;
-		}		
+		}
 	}
-	a/=2;
+	a /= 2;
 
 	return str;
 }
@@ -66,7 +66,7 @@ char *byte_to_char(byte* char_to_convert)
 int main()
 {
 	//char c = 'A';
-	byte b[] = {0b00000000,0b01000000,0b00000000,0b00000000,0b00000000,0b00000000,0b00000000,0b00000001};
+	byte b[] = {0b00000000, 0b01000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000001};
 	/*FILE* fichier = NULL;
 	fichier = fopen("test.txt", "r");
 	if (fichier != NULL)
@@ -79,7 +79,7 @@ int main()
         printf("Impossible d'ouvrir le file test.txt");
     }
 	*/
-	char* test = byte_to_char(b);
+	char *test = byte_to_char(b);
 	printf("%c", test[0]);
 	return 0;
 }

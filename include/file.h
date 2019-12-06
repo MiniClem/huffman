@@ -4,10 +4,7 @@
 #include <string.h>
 #include <math.h>
 
-
-void ecrire_bit(FILE* file, char bit);
-void lire_bit(File* file);
-
-
+void ecrire_bit(FILE *file, char bit);
+void lire_bit(FILE *file);
 
 #endif
