@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef char byte;
-
 char *lire_caractere_fichier(FILE *file)
 {
 	long size;
