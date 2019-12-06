@@ -1,5 +1,5 @@
-#ifndef __encodage_h__
-#define __encodage_h__
+#ifndef __file_h__
+#define __file_h__
 #include "arbre.h"
 #include <string.h>
 #include <math.h>
