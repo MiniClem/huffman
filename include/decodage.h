@@ -1,6 +1,6 @@
 #ifndef __decodage_h__
 #define __decodage_h__
-#include "arbre.h"
+#include "./arbre.h"
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
