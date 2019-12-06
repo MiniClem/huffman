@@ -1,9 +1,9 @@
 #include "../include/encodage.h"
 
 // COMPRESS
-byte *compress(char *m)
+byte **compress(char *m)
 {
-	byte *b = NULL;
+	byte **b = NULL;
 	int length = strlen(m);
 
 	// Aligne à 8 bits
@@ -16,7 +16,7 @@ byte *compress(char *m)
 	b = calloc(length, sizeof(byte));
 	for (int i = 0; i < length; i += 8)
 	{
-		b[i / 8] = char_to_byte(m[i]);
+		*b[i / 8] = char_to_byte(m + i);
 	}
 
 	return b;
@@ -306,7 +306,7 @@ int main()
 	print_encodage(p_enc); // Affichage test
 
 	// Compression
-	byte *b = compress(p_enc->s_enc);
+	byte **b = compress(p_enc->s_enc);
 
 	// Libération mémoire
 	destruct_encodage(p_enc);

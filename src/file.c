@@ -61,6 +61,7 @@ char *byte_to_char(byte byte_to_convert)
 	return str;
 }
 
+/*
 int main()
 {
 	//char c = 'A';
@@ -68,21 +69,22 @@ int main()
 	byte b = (char)0b01000001;
 
 	// byte b[] = {0b00000000, 0b01000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000001};
-	/*FILE* fichier = NULL;
-	fichier = fopen("test.txt", "r");
-	if (fichier != NULL)
-    {
-	printf("%s",lire_caractere_fichier(fichier));
-	}
-    else
-    {
-        // On affiche un message d'erreur si on veut
-        printf("Impossible d'ouvrir le file test.txt");
-    }
-	*/
+	// FILE* fichier = NULL;
+	// fichier = fopen("test.txt", "r");
+	// if (fichier != NULL)
+	// {
+	// printf("%s",lire_caractere_fichier(fichier));
+	// }
+	// else
+	// {
+	//     // On affiche un message d'erreur si on veut
+	//     printf("Impossible d'ouvrir le file test.txt");
+	// }
+
 	byte *test = char_to_byte(c);
 	char *test_c = byte_to_char(b);
 	printf("%c\n", test[0]);
 	// printf("%s\n", test_c);
 	return 0;
 }
+*/
