@@ -1,3 +1,5 @@
+#ifndef __LISTE_H_
+#define __LISTE_H_
 #include <stdlib.h>
 #include <assert.h>
 
@@ -29,3 +31,4 @@ Liste queue_liste(Liste l);
 Liste liberer_liste(Liste l);
 
 Liste liberer_maillon(Maillon *m);
+#endif

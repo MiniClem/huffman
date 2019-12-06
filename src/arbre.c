@@ -37,23 +37,34 @@ Arbre fils_gauche(Arbre a)
 {
 	assert(a != NULL);
 
-	return fils_gauche(a);
+	return a->fils_gauche;
 }
 
 Arbre fils_droit(Arbre a)
 {
 	assert(a != NULL);
 
-	return fils_droit(a);
+	return a->fils_droit;
 }
 
 Arbre detruire_arbre(Arbre a)
 {
 	if (!est_arbre_vide(a))
 	{
-		detruire_arbre(fils_gauche(a));
-		detruire_arbre(fils_droit(a));
+		// printf("Destruction arbre..\n");
+
+		if (a->fils_gauche != NULL)
+		{
+			detruire_arbre(fils_gauche(a));
+		}
+
+		if (a->fils_droit != NULL)
+		{
+			detruire_arbre(fils_droit(a));
+		}
+
 		free(a);
+		a = NULL;
 	}
 
 	return NULL;
@@ -142,6 +153,32 @@ Noeud *rechercher(Arbre a, Elt e)
 	if (!n)
 	{
 		n = rechercher(fils_droit(a), e);
+	}
+
+	return n;
+}
+
+Noeud *rechercher_encodage(Arbre a, Elt e, char *c, int curs)
+{
+	Noeud *n;
+	if (est_arbre_vide(a))
+	{
+		c[curs] = '\0';
+		return NULL;
+	}
+
+	if (racine(a) == e)
+	{
+		c[curs] = '\0';
+		return a;
+	}
+
+	c[curs] = '0';
+	n = rechercher_encodage(fils_gauche(a), e, c, curs + 1);
+	if (!n)
+	{
+		c[curs] = '1';
+		n = rechercher_encodage(fils_droit(a), e, c, curs + 1);
 	}
 
 	return n;

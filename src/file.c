@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "../include/file.h"
 
 char *lire_caractere_fichier(FILE *file)
 {
