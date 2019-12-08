@@ -22,4 +22,11 @@ Arbre lire_dico(char* code);
 
 Elt lire_ascii(char* octet );
 
+
+/* 
+ * Renvoie le texte clair à partir du texte compressé et de l'arbre de décodage des caratères
+ */
+void decode(char* code,char * clair, Arbre decodage);
+
+
 #endif
