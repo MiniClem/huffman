@@ -6,6 +6,9 @@
 
 typedef char byte;
 
+FILE *ouvrir_fichier(char *filename);
+void fermer_fichier(FILE *file);
+
 void ecrire_bit(FILE *file, char bit);
 void lire_bit(FILE *file);
 
