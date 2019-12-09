@@ -134,6 +134,7 @@ Arbre huffman_merge(Arbre *l, int size)
 }
 // DICO
 
+// CONSTR/DESTR
 p_encodage create_encodage()
 {
 	p_encodage enc = (p_encodage)malloc(sizeof(encodage));
@@ -179,7 +180,9 @@ void destruct_encodage(p_encodage enc)
 		free(enc);
 	}
 }
+// CONSTR/DESTR
 
+// GET/SET
 char *s_encodage(p_encodage enc)
 {
 	return enc->s_enc;
@@ -213,7 +216,9 @@ void append_encodage(char *chaine, p_encodage enc)
 	free(s_encodage(enc));
 	enc->s_enc = s_new_encodage;
 }
+// GET/SET
 
+// UTILS
 void print_encodage(p_encodage enc)
 {
 	int length = strlen(enc->s_enc);
@@ -226,6 +231,41 @@ void print_encodage(p_encodage enc)
 
 	printf("\n");
 }
+
+void binaire(int entier, char s[ASCII_SIZE])
+{
+	int pt = 0;
+	int puissance;
+
+	/*
+	* On passe en revue chaque 2^i pour savoir si un le bit i
+	* peut être égal à 0 ou 1. On commence par le bit de poid fort.
+	*/
+	for (int i = ASCII_SIZE - 2; i >= 0; i--)
+	{
+		puissance = pow(2, i);
+
+		// Si le résultat de la puissance est >= 0 alors le bit correspondant est égal à 1
+		// Car si la différence est positive ou nul alors le résultat de la puissance est comprise
+		// dans le reste et donc le nombre à écrire est plus grand ou égal que celle-ci.
+		if ((entier - puissance) >= 0)
+		{
+			s[pt++] = '1';
+			entier -= puissance;
+		}
+		else
+		{
+			s[pt++] = '0';
+		}
+	}
+	s[pt] = '\0';
+}
+
+void code_ascii(char c, char *c_tab)
+{
+	binaire((int)c, c_tab);
+}
+// UTILS
 
 void create_code_arbre(Arbre a, p_encodage enc)
 {
@@ -267,48 +307,14 @@ void frequences(char *m, p_encodage enc)
 	}
 }
 
-void binaire(int entier, char s[ASCII_SIZE])
-{
-	int pt = 0;
-	int puissance;
-
-	/*
-	* On passe en revue chaque 2^i pour savoir si un le bit i
-	* peut être égal à 0 ou 1. On commence par le bit de poid fort.
-	*/
-	for (int i = ASCII_SIZE - 2; i >= 0; i--)
-	{
-		puissance = pow(2, i);
-
-		// Si le résultat de la puissance est >= 0 alors le bit correspondant est égal à 1
-		// Car si la différence est positive ou nul alors le résultat de la puissance est comprise
-		// dans le reste et donc le nombre à écrire est plus grand ou égal que celle-ci.
-		if ((entier - puissance) >= 0)
-		{
-			s[pt++] = '1';
-			entier -= puissance;
-		}
-		else
-		{
-			s[pt++] = '0';
-		}
-	}
-	s[pt] = '\0';
-}
-
-void code_ascii(char c, char *c_tab)
-{
-	binaire((int)c, c_tab);
-}
-
 // TESTS
 int main()
 {
 	// Test réel
-	// char *m = "aaaabbbccdaaaadddd";
-	char *filename = "test_encodage.txt";
-	FILE *file = ouvrir_fichier(filename);
-	char *m = lire_caractere_fichier(file);
+	char *m = "aaabbc";
+	// char *filename = "test_encodage.txt";
+	// FILE *file = ouvrir_fichier(filename);
+	// char *m = lire_caractere_fichier(file);
 
 	p_encodage p_enc = create_encodage();
 	frequences(m, p_enc);
