@@ -11,12 +11,15 @@
 typedef struct encodage
 {
 	char *s_enc;
+	byte **b_enc;
 	Arbre dico;
 	int *tab_frequences;
 } encodage;
 typedef encodage *p_encodage;
 
 p_encodage create_encodage();
+
+void compress(p_encodage p_enc);
 
 /**
  * @brief Crée une liste d'arbre à partir des fréquences contenues dans l'encodage

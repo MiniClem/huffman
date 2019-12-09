@@ -2,25 +2,29 @@
 #include "../include/file.h"
 
 // COMPRESS
-byte **compress(char *m)
+void compress(p_encodage p_enc)
 {
-	byte **b = NULL; // p -- [] --> p --> byte
-	int length = strlen(m);
+	int length = strlen(p_enc->s_enc);
 
 	// Aligne à 8 bits
 	int mod = length % 8;
-	if (mod != 0)
-	{
-		length += mod;
-	}
+	length += mod;
+	length /= 8;
 
-	b = calloc(length, sizeof(byte));
+	p_enc->b_enc = calloc(length, sizeof(byte *));
 	for (int i = 0; i < length; i += 8)
 	{
-		b[i / 8] = char_to_byte(m + i);
+		if (strlen(p_enc->s_enc + i) < 8)
+		{
+			char m_final[8] = {'0'};
+			strcpy(m_final, p_enc->s_enc + i);
+			p_enc->b_enc[i / 8] = char_to_byte(m_final);
+		}
+		else
+		{
+			p_enc->b_enc[i / 8] = char_to_byte(p_enc->s_enc + i);
+		}
 	}
-
-	return b;
 }
 // COMPRESS
 
@@ -135,6 +139,7 @@ p_encodage create_encodage()
 	p_encodage enc = (p_encodage)malloc(sizeof(encodage));
 	enc->s_enc = malloc(sizeof(char));
 	enc->s_enc[0] = '\0';
+	enc->b_enc = NULL; // Init lors de son utilisation
 	enc->dico = NULL;
 	enc->tab_frequences = calloc(255, sizeof(int));
 	return enc;
@@ -146,6 +151,15 @@ void destruct_encodage(p_encodage enc)
 	{
 		free(enc->s_enc);
 		enc->s_enc = NULL;
+	}
+
+	if (enc && enc->b_enc)
+	{
+		for (int i = 0; i < 9; i++)
+		{
+			free(enc->b_enc[i]);
+		}
+		free(enc->b_enc);
 	}
 
 	if (enc && enc->dico)
@@ -292,7 +306,7 @@ int main()
 {
 	// Test réel
 	// char *m = "aaaabbbccdaaaadddd";
-	char *filename = "test_encodage.txt";
+	char *filename = "test.txt";
 	FILE *file = ouvrir_fichier(filename);
 	char *m = lire_caractere_fichier(file);
 
@@ -309,7 +323,7 @@ int main()
 	print_encodage(p_enc); // Affichage test
 
 	// Compression
-	byte **b = compress(p_enc->s_enc);
+	compress(p_enc);
 
 	// Libération mémoire
 	destruct_encodage(p_enc);
