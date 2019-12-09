@@ -1,9 +1,10 @@
 #include "../include/encodage.h"
+#include "../include/file.h"
 
 // COMPRESS
 byte **compress(char *m)
 {
-	byte **b = NULL;
+	byte **b = NULL; // p -- [] --> p --> byte
 	int length = strlen(m);
 
 	// Aligne à 8 bits
@@ -16,7 +17,7 @@ byte **compress(char *m)
 	b = calloc(length, sizeof(byte));
 	for (int i = 0; i < length; i += 8)
 	{
-		*b[i / 8] = char_to_byte(m + i);
+		b[i / 8] = char_to_byte(m + i);
 	}
 
 	return b;
@@ -290,11 +291,13 @@ void code_ascii(char c, char *c_tab)
 int main()
 {
 	// Test réel
-	char *c = "aaaabbbccdaaaadddd";
+	// char *m = "aaaabbbccdaaaadddd";
+	char *filename = "test_encodage.txt";
+	FILE *file = ouvrir_fichier(filename);
+	char *m = lire_caractere_fichier(file);
 
 	p_encodage p_enc = create_encodage();
-	frequences(c, p_enc);
-
+	frequences(m, p_enc);
 	huffman(p_enc);
 
 	// Encodage dico
@@ -302,7 +305,7 @@ int main()
 	print_encodage(p_enc); // Affichage test
 
 	// Encodage message
-	create_code_texte(p_enc, c);
+	create_code_texte(p_enc, m);
 	print_encodage(p_enc); // Affichage test
 
 	// Compression
