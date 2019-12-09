@@ -51,7 +51,7 @@ Arbre *creer_liste_arbre(p_encodage enc, int *size)
 	// Allocation de la mémoire pour le tableau de noeud
 	t_noeud = (Arbre *)calloc(*size, sizeof(Arbre));
 	// Copie de la mémoire de temp jusqu'au final
-	memcpy(t_noeud, temp_noeuds, sizeof(Arbre *) * *size);
+	memcpy(t_noeud, temp_noeuds, sizeof(Arbre) * *size);
 
 	return t_noeud;
 }
@@ -306,7 +306,7 @@ int main()
 {
 	// Test réel
 	// char *m = "aaaabbbccdaaaadddd";
-	char *filename = "test.txt";
+	char *filename = "test_encodage.txt";
 	FILE *file = ouvrir_fichier(filename);
 	char *m = lire_caractere_fichier(file);
 
