@@ -18,7 +18,7 @@ LIBS=-lm
 _OBJ = main.o liste.o liste_ext.o arbre.o encodage.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
-_ENC_TEST_OBJ = encodage.o liste.o liste_ext.o arbre.o
+_ENC_TEST_OBJ = encodage.o liste.o liste_ext.o arbre.o file.o
 ENC_TEST_OBJ = $(patsubst %,$(ODIR)/%,$(_ENC_TEST_OBJ))
 
 _FILE_TEST_OBJ = file.o liste.o liste_ext.o arbre.o

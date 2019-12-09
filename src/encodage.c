@@ -1,25 +1,30 @@
 #include "../include/encodage.h"
+#include "../include/file.h"
 
 // COMPRESS
-byte *compress(char *m)
+void compress(p_encodage p_enc)
 {
-	byte *b = NULL;
-	int length = strlen(m);
+	int length = strlen(p_enc->s_enc);
 
 	// Aligne à 8 bits
 	int mod = length % 8;
-	if (mod != 0)
-	{
-		length += mod;
-	}
+	length += mod;
+	length /= 8;
 
-	b = calloc(length, sizeof(byte));
+	p_enc->b_enc = calloc(length, sizeof(byte *));
 	for (int i = 0; i < length; i += 8)
 	{
-		b[i / 8] = char_to_byte(m[i]);
+		if (strlen(p_enc->s_enc + i) < 8)
+		{
+			char m_final[8] = {'0'};
+			strcpy(m_final, p_enc->s_enc + i);
+			p_enc->b_enc[i / 8] = char_to_byte(m_final);
+		}
+		else
+		{
+			p_enc->b_enc[i / 8] = char_to_byte(p_enc->s_enc + i);
+		}
 	}
-
-	return b;
 }
 // COMPRESS
 
@@ -46,7 +51,7 @@ Arbre *creer_liste_arbre(p_encodage enc, int *size)
 	// Allocation de la mémoire pour le tableau de noeud
 	t_noeud = (Arbre *)calloc(*size, sizeof(Arbre));
 	// Copie de la mémoire de temp jusqu'au final
-	memcpy(t_noeud, temp_noeuds, sizeof(Arbre *) * *size);
+	memcpy(t_noeud, temp_noeuds, sizeof(Arbre) * *size);
 
 	return t_noeud;
 }
@@ -134,6 +139,7 @@ p_encodage create_encodage()
 	p_encodage enc = (p_encodage)malloc(sizeof(encodage));
 	enc->s_enc = malloc(sizeof(char));
 	enc->s_enc[0] = '\0';
+	enc->b_enc = NULL; // Init lors de son utilisation
 	enc->dico = NULL;
 	enc->tab_frequences = calloc(255, sizeof(int));
 	return enc;
@@ -145,6 +151,15 @@ void destruct_encodage(p_encodage enc)
 	{
 		free(enc->s_enc);
 		enc->s_enc = NULL;
+	}
+
+	if (enc && enc->b_enc)
+	{
+		for (int i = 0; i < 9; i++)
+		{
+			free(enc->b_enc[i]);
+		}
+		free(enc->b_enc);
 	}
 
 	if (enc && enc->dico)
@@ -290,11 +305,13 @@ void code_ascii(char c, char *c_tab)
 int main()
 {
 	// Test réel
-	char *c = "aaaabbbccdaaaadddd";
+	// char *m = "aaaabbbccdaaaadddd";
+	char *filename = "test_encodage.txt";
+	FILE *file = ouvrir_fichier(filename);
+	char *m = lire_caractere_fichier(file);
 
 	p_encodage p_enc = create_encodage();
-	frequences(c, p_enc);
-
+	frequences(m, p_enc);
 	huffman(p_enc);
 
 	// Encodage dico
@@ -302,11 +319,11 @@ int main()
 	print_encodage(p_enc); // Affichage test
 
 	// Encodage message
-	create_code_texte(p_enc, c);
+	create_code_texte(p_enc, m);
 	print_encodage(p_enc); // Affichage test
 
 	// Compression
-	byte *b = compress(p_enc->s_enc);
+	compress(p_enc);
 
 	// Libération mémoire
 	destruct_encodage(p_enc);
