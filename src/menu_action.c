@@ -8,3 +8,8 @@ int choose_path(char *out_c)
 	}
 	return 0;
 }
+
+int compress_selected(char *path_to_file)
+{
+	return compress(path_to_file);
+}
