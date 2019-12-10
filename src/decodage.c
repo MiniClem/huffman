@@ -78,16 +78,20 @@ char parcours_arbre(char* sequence, Arbre decodage)
 {
 	if (!est_arbre_vide(decodage))
 	{
-		if(est_feuille(decodage)) return decodage-> elt ;
-		
-		if(*(sequence+1)=='\0') return 0 ;
-
-		printf("parcours arbre chillin \n") ;
-		
-		sequence++ ;
-		if(*(sequence)=='0') return (parcours_arbre(sequence,fils_gauche(decodage))) ;
-		return(parcours_arbre(sequence, fils_droit(decodage))) ;
+		if(est_feuille(decodage)) { 
+			printf("%c",decodage->elt) ;
+			return decodage->elt ;
+		}
+		if(*sequence == '\0') return 0 ;
+		if(decodage->elt == '0'){
+			return parcours_arbre(++sequence, fils_gauche(decodage)) ;
+		}
+		else if(decodage->elt == '1'){
+			return parcours_arbre(++sequence, fils_droit(decodage)) ;
+		}
 	}
+
+	return 0 ;
 }
 
 static char* append_char(char* out_c, char app){
@@ -104,25 +108,27 @@ static char* append_char(char* out_c, char app){
 // TESTS
 int main(){
 	//char* code = "00010100000110100001110110010100101101001101100111";
-	/*
+	
 	Arbre a = creer_arbre('a',0,NULL,NULL);
 	Arbre b = creer_arbre('b',0,NULL,NULL);
 	Arbre ab = creer_arbre('0',0,a,b);
 	Arbre c = creer_arbre('c',0,NULL,NULL);
 	Arbre abc = creer_arbre('0',0,ab,c);
 	
-	char* code= "00101100";
-	char* clair = NULL;
+	/*char* code= "00101100";
+	char* clair = NULL; */
 	
-	decode(code,clair,abc, );
-	*/
+	parcours_arbre("00",abc) ;
+
+	//decode(code,clair,abc, );
+	
 	/*
 	while (*clair = '\0')
 	{
 		printf("%c",*clair);
 		clair++;
 	}
-	*/
+	
 	char* code = malloc(3 * sizeof(char)) ;
 	code[0] = '1';
 	code[1] = '0';
@@ -133,5 +139,5 @@ int main(){
 
 	printf("%s\n", code);
 	free(code);
-	return  0;
+	return  0; */
 }
