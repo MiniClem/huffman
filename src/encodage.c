@@ -222,7 +222,7 @@ void destruct_encodage(p_encodage enc)
 // CONSTR/DESTR
 
 // GET/SET
-char *s_encodage(p_encodage enc)
+unsigned char *s_encodage(p_encodage enc)
 {
 	return enc->s_enc;
 }
@@ -232,20 +232,19 @@ int *t_frequences(p_encodage enc)
 	return enc->tab_frequences;
 }
 
-char charAt_encodage(int i, p_encodage enc)
+unsigned char charAt_encodage(int i, p_encodage enc)
 {
-	const char c = s_encodage(enc)[i];
-	return c;
+	return s_encodage(enc)[i];
 }
 
-void append_encodage(char *chaine, p_encodage enc)
+void append_encodage(unsigned char *chaine, p_encodage enc)
 {
 	// Point d'amélioration, utiliser une allocation dynamique de mémoire et utiliser memcpy pour ajouter des éléments
 	int length_enc = strlen(s_encodage(enc));
 	int length = strlen(chaine);
 
 	// Créer un nouvel espace mémoire qui peut contenir toutes les chaines
-	char *s_new_encodage = (char *)calloc(length_enc + length + 2, sizeof(char));
+	unsigned char *s_new_encodage = (unsigned char *)calloc(length_enc + length + 2, sizeof(unsigned char));
 
 	// Copie les contenus
 	strcpy(s_new_encodage, s_encodage(enc));
@@ -271,7 +270,7 @@ void print_encodage(p_encodage enc)
 	printf("\n");
 }
 
-void binaire(int entier, char s[ASCII_SIZE])
+void binaire(int entier, unsigned char s[ASCII_SIZE])
 {
 	int pt = 0;
 	int puissance;
@@ -300,7 +299,7 @@ void binaire(int entier, char s[ASCII_SIZE])
 	s[pt] = '\0';
 }
 
-void code_ascii(char c, char *c_tab)
+void code_ascii(unsigned char c, unsigned char *c_tab)
 {
 	binaire((int)c, c_tab);
 }
@@ -323,7 +322,7 @@ void create_code_arbre(Arbre a, p_encodage enc)
 	}
 }
 
-void create_code_texte(p_encodage enc, char *m)
+void create_code_texte(p_encodage enc, unsigned char *m)
 {
 	Arbre dico = enc->dico;
 	int length = strlen(m);
@@ -336,7 +335,7 @@ void create_code_texte(p_encodage enc, char *m)
 	}
 }
 
-void frequences(char *m, p_encodage enc)
+void frequences(unsigned char *m, p_encodage enc)
 {
 	unsigned int k = 0;
 	int *tab_freq = t_frequences(enc);
