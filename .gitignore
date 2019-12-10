@@ -54,3 +54,5 @@ dkms.conf
 .vscode/
 
 src/test_encodage
+
+src/test_decodage
