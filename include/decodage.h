@@ -25,13 +25,23 @@ Elt lire_ascii(char* octet, int compteur );
 
 /* 
  * Renvoie le texte clair à partir du texte compressé et de l'arbre de décodage des caratères
+
+ * on prend une chaine de caractères, on parcourt l'arbre
+ * Tant qu'on n'est pas arrivé au bout de la chaine, 
+ * on ajoute dans sequence la valeur de *code.
+ * on teste si on arrive sur une feuille. si on est sur une feuille
+ * on met le caractère dans clair. Si on n'arrive pas à une feuille,
+ * on relance la boucle
  */
 void decode(char* code, char* clair, Arbre decodage, char* sequence);
 
 /*
- * Parcoure l'arbre pendant le décodage de la chaine de caractères 
+ * Parcourt l'arbre pendant le décodage de la chaine de caractères 
+	si on rencontre un 0, appel récursif sur le fils gauche
+	si on rencontre un 1, appel récursif sur le fils droit
+	si c'est une feuille, on affiche le caractère
  */
-char parcours_arbre(char* sequence, Arbre decodage);
+char parcours_arbre(char* sequence, Arbre decodage, int i);
 
 static char* append_char(char* out_c, char app);
 

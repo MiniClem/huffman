@@ -48,59 +48,75 @@ Elt lire_ascii(char* octet,int compteur)
 	return ascii;
 }
 
+
+/* 
+on prend une chaine de caractères, on parcourt l'arbre
+Tant qu'on n'est pas arrivé au bout de la chaine, 
+on ajoute dans sequence la valeur de *code.
+on teste si on arrive sur une feuille. si on est sur une feuille
+on met le caractère dans clair. Si on n'arrive pas à une feuille,
+on relance la boucle
+
+
+*/
+
 void decode(char* code, char* clair, Arbre decodage, char* sequence)
 {
-	int i=0,j=0;
+	int j=0;
+	int i=0;
 	while(*code != '\0'){
+		printf("on ajoute %c dans sequence\n",*code) ;
+		
 		sequence = append_char(sequence, *code);
-		i+=1;
 		j+=1;
-		printf("i= %d , j= %d *code=%c\n",i,j,*code) ;
-
-		if(parcours_arbre(sequence,decodage) != 0){
+		i+=1;
+		
+		printf("i= %d  j= %d *code=%c\n\n",i,j,*code) ;
+		printf("sequence : %s\n",sequence) ;
+		printf("parcours arbre retourne = %d \n",parcours_arbre(sequence,decodage,i)) ;
+		if(parcours_arbre(sequence,decodage,i) != 0){
 			printf("if ok \n") ;	
-			sequence -= i ;
-			i = 0 ;  
-
-			*clair = parcours_arbre(sequence,decodage);
-			printf("%c",parcours_arbre(sequence,decodage));
-			clair++;
-				
+			clair = append_char(clair,parcours_arbre(sequence,decodage,i));
+			printf("%c",parcours_arbre(sequence,decodage,i));
+			sequence= "" ;
+			i=0 ;
 		}
 		code++;
 	}
-	*clair='\0';
 
+	clair[j] = '\0';
+	
 	return;
-}
+} 
 
 
-char parcours_arbre(char* sequence, Arbre decodage)
+
+char parcours_arbre(char* sequence, Arbre decodage, int i) 
 {
 	assert(!est_arbre_vide(decodage)) ;
 	if(est_feuille(decodage)) { 
 		printf("on est sur une feuille \n") ;
-		printf("%c",decodage->elt) ;
+		printf("ON RETOURNE %c\n",decodage->elt) ;
 		return decodage->elt ;
 	}
-	if(*sequence == '\0'){
-		printf("la séquence est terminée") ;
+	if(sequence[i+1] == '\0'){
+		printf("la sequence est terminee ON RETOURNE ZERO \n") ;
 		return 0 ;
 	}
-	if(*sequence == '0'){
-		printf("carac : %c\n", *sequence) ;
+
+
+	if(sequence[i-1] == '0'){
+		printf("carac : %c\n", sequence[i-1]) ;
 		printf("on passe par le 0 \n\n") ;
-		sequence++ ;
-		return parcours_arbre(sequence, fils_gauche(decodage)) ;
+		return parcours_arbre(sequence, fils_gauche(decodage),++i) ;
 	}
-	else if(*sequence == '1'){
-		printf("carac : %c\n", *sequence) ;
+	else{
+		printf("carac : %c\n", sequence[i-1]) ;
 		printf("on passe par le 1 \n\n") ;
-		sequence++ ;
-		return parcours_arbre(sequence, fils_droit(decodage)) ;
+		return parcours_arbre(sequence, fils_droit(decodage),++i) ;
 	}
 
-	return 0 ;
+
 }
 
 static char* append_char(char* out_c, char app){
@@ -124,12 +140,15 @@ int main(){
 	Arbre c = creer_arbre('c',0,NULL,NULL);
 	Arbre abc = creer_arbre('0',0,ab,c);
 	
-	/*char* code= "00101100";
-	char* clair = NULL; */
-	
-	parcours_arbre("11",abc) ;
+	char* code= "01101100";
+	char* clair = NULL; 
 
-	//decode(code,clair,abc, );
+	int i = 0 ;
+	
+	//parcours_arbre("01",abc,i) ;
+
+	decode(code,clair,abc,"");
+	printf("clair: %s \n",clair) ;
 	
 	/*
 	while (*clair = '\0')
