@@ -4,9 +4,10 @@
 //EXTERN
 int compress(char *path_to_file)
 {
+	char compressed_filename[256] = {0};
+
 	// Ouvre et copie le contenu du fichier dans m
-	FILE *file = ouvrir_fichier(path_to_file);
-	char *m = lire_caractere_fichier(file);
+	char *m = lire_caractere_fichier(path_to_file);
 
 	p_encodage p_enc = create_encodage();
 
@@ -27,6 +28,11 @@ int compress(char *path_to_file)
 
 	// Compression
 	compress_encodage(p_enc);
+
+	strcpy(compressed_filename, path_to_file);
+	strcat(compressed_filename, ".huf");
+
+	ecrire_bytes_fichier(compressed_filename, p_enc->b_enc, strlen(p_enc->b_enc));
 
 	// Libération mémoire
 	destruct_encodage(p_enc);

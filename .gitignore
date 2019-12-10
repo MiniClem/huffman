@@ -56,3 +56,6 @@ dkms.conf
 .DS_Store
 src/test_encodage
 src/main
+src/test_decodage
+src/test_file
+src/kak.txt
