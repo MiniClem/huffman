@@ -17,20 +17,7 @@ void compress(p_encodage p_enc)
 	int i;
 	for (i = 0; i < length; i++)
 	{
-
-		char *l = p_enc->s_enc + i * 8;
-		byte *c = char_to_byte(l);
-
-		// Si dernier octet on rempli de 0 les caractères restants
-		if (strlen(l) < 8)
-		{
-			int p = 0;
-			for (int k = 0; k < 8 - strlen(l); k++)
-			{
-				p += pow(2, k);
-			}
-			*c &= p;
-		}
+		byte *c = char_to_byte(p_enc->s_enc + i * 8);
 
 		// Copie de la mémoire
 		memcpy(p_enc->b_enc + i, c, sizeof(byte));
@@ -318,14 +305,15 @@ void frequences(char *m, p_encodage enc)
 	}
 }
 
+/*
 // TESTS
 int main()
 {
 	// Test réel
-	char *m = "aaabbc";
-	// char *filename = "test_encodage.txt";
-	// FILE *file = ouvrir_fichier(filename);
-	// char *m = lire_caractere_fichier(file);
+	// char *m = "aaabbc";
+	char *filename = "test_encodage.txt";
+	FILE *file = ouvrir_fichier(filename);
+	char *m = lire_caractere_fichier(file);
 
 	p_encodage p_enc = create_encodage();
 	frequences(m, p_enc);
@@ -412,3 +400,4 @@ int main()
 
 	return 0;
 }
+*/
