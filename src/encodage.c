@@ -1,25 +1,32 @@
 #include "../include/encodage.h"
+#include "../include/file.h"
 
 // COMPRESS
-byte **compress(char *m)
+void compress(p_encodage p_enc)
 {
-	byte **b = NULL;
-	int length = strlen(m);
+	// Taille encodage en char représentant des bytes donc 8 char pour un byte
+	int length = strlen(p_enc->s_enc);
 
-	// Aligne à 8 bits
+	// Aligne à 8 bits la longueur du résultat
 	int mod = length % 8;
-	if (mod != 0)
+	length += mod;
+	length /= 8;
+
+	// Alloue l'espace mémoire nécessaire pour créer une chaine de byte
+	p_enc->b_enc = calloc(length, sizeof(byte) + 1);
+	int i;
+	for (i = 0; i < length; i++)
 	{
-		length += mod;
+		byte *c = char_to_byte(p_enc->s_enc + i * 8);
+
+		// Copie de la mémoire
+		memcpy(p_enc->b_enc + i, c, sizeof(byte));
+		free(c);
+		c = NULL;
 	}
 
-	b = calloc(length, sizeof(byte));
-	for (int i = 0; i < length; i += 8)
-	{
-		*b[i / 8] = char_to_byte(m + i);
-	}
-
-	return b;
+	// Ajout du caractère de fin
+	p_enc->b_enc[i] = '\0';
 }
 // COMPRESS
 
@@ -46,7 +53,7 @@ Arbre *creer_liste_arbre(p_encodage enc, int *size)
 	// Allocation de la mémoire pour le tableau de noeud
 	t_noeud = (Arbre *)calloc(*size, sizeof(Arbre));
 	// Copie de la mémoire de temp jusqu'au final
-	memcpy(t_noeud, temp_noeuds, sizeof(Arbre *) * *size);
+	memcpy(t_noeud, temp_noeuds, sizeof(Arbre) * *size);
 
 	return t_noeud;
 }
@@ -129,11 +136,13 @@ Arbre huffman_merge(Arbre *l, int size)
 }
 // DICO
 
+// CONSTR/DESTR
 p_encodage create_encodage()
 {
 	p_encodage enc = (p_encodage)malloc(sizeof(encodage));
 	enc->s_enc = malloc(sizeof(char));
 	enc->s_enc[0] = '\0';
+	enc->b_enc = NULL; // Init lors de son utilisation
 	enc->dico = NULL;
 	enc->tab_frequences = calloc(255, sizeof(int));
 	return enc;
@@ -145,6 +154,11 @@ void destruct_encodage(p_encodage enc)
 	{
 		free(enc->s_enc);
 		enc->s_enc = NULL;
+	}
+
+	if (enc && enc->b_enc)
+	{
+		free(enc->b_enc);
 	}
 
 	if (enc && enc->dico)
@@ -164,7 +178,9 @@ void destruct_encodage(p_encodage enc)
 		free(enc);
 	}
 }
+// CONSTR/DESTR
 
+// GET/SET
 char *s_encodage(p_encodage enc)
 {
 	return enc->s_enc;
@@ -198,7 +214,9 @@ void append_encodage(char *chaine, p_encodage enc)
 	free(s_encodage(enc));
 	enc->s_enc = s_new_encodage;
 }
+// GET/SET
 
+// UTILS
 void print_encodage(p_encodage enc)
 {
 	int length = strlen(enc->s_enc);
@@ -211,6 +229,41 @@ void print_encodage(p_encodage enc)
 
 	printf("\n");
 }
+
+void binaire(int entier, char s[ASCII_SIZE])
+{
+	int pt = 0;
+	int puissance;
+
+	/*
+	* On passe en revue chaque 2^i pour savoir si un le bit i
+	* peut être égal à 0 ou 1. On commence par le bit de poid fort.
+	*/
+	for (int i = ASCII_SIZE - 2; i >= 0; i--)
+	{
+		puissance = pow(2, i);
+
+		// Si le résultat de la puissance est >= 0 alors le bit correspondant est égal à 1
+		// Car si la différence est positive ou nul alors le résultat de la puissance est comprise
+		// dans le reste et donc le nombre à écrire est plus grand ou égal que celle-ci.
+		if ((entier - puissance) >= 0)
+		{
+			s[pt++] = '1';
+			entier -= puissance;
+		}
+		else
+		{
+			s[pt++] = '0';
+		}
+	}
+	s[pt] = '\0';
+}
+
+void code_ascii(char c, char *c_tab)
+{
+	binaire((int)c, c_tab);
+}
+// UTILS
 
 void create_code_arbre(Arbre a, p_encodage enc)
 {
@@ -252,49 +305,18 @@ void frequences(char *m, p_encodage enc)
 	}
 }
 
-void binaire(int entier, char s[ASCII_SIZE])
-{
-	int pt = 0;
-	int puissance;
-
-	/*
-	* On passe en revue chaque 2^i pour savoir si un le bit i
-	* peut être égal à 0 ou 1. On commence par le bit de poid fort.
-	*/
-	for (int i = ASCII_SIZE - 2; i >= 0; i--)
-	{
-		puissance = pow(2, i);
-
-		// Si le résultat de la puissance est >= 0 alors le bit correspondant est égal à 1
-		// Car si la différence est positive ou nul alors le résultat de la puissance est comprise
-		// dans le reste et donc le nombre à écrire est plus grand ou égal que celle-ci.
-		if ((entier - puissance) >= 0)
-		{
-			s[pt++] = '1';
-			entier -= puissance;
-		}
-		else
-		{
-			s[pt++] = '0';
-		}
-	}
-	s[pt] = '\0';
-}
-
-void code_ascii(char c, char *c_tab)
-{
-	binaire((int)c, c_tab);
-}
-
+/*
 // TESTS
 int main()
 {
 	// Test réel
-	char *c = "aaaabbbccdaaaadddd";
+	// char *m = "aaabbc";
+	char *filename = "test_encodage.txt";
+	FILE *file = ouvrir_fichier(filename);
+	char *m = lire_caractere_fichier(file);
 
 	p_encodage p_enc = create_encodage();
-	frequences(c, p_enc);
-
+	frequences(m, p_enc);
 	huffman(p_enc);
 
 	// Encodage dico
@@ -302,11 +324,11 @@ int main()
 	print_encodage(p_enc); // Affichage test
 
 	// Encodage message
-	create_code_texte(p_enc, c);
+	create_code_texte(p_enc, m);
 	print_encodage(p_enc); // Affichage test
 
 	// Compression
-	byte **b = compress(p_enc->s_enc);
+	compress(p_enc);
 
 	// Libération mémoire
 	destruct_encodage(p_enc);
@@ -378,3 +400,4 @@ int main()
 
 	return 0;
 }
+*/

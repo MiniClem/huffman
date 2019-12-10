@@ -4,8 +4,7 @@
 
 FILE *ouvrir_fichier(char *filename)
 {
-	FILE *fichier = malloc(sizeof(FILE));
-	fichier = fopen(filename, "r");
+	FILE *fichier = fopen(filename, "r");
 	assert(fichier != NULL);
 	return fichier;
 }
@@ -13,7 +12,6 @@ FILE *ouvrir_fichier(char *filename)
 void fermer_fichier(FILE *file)
 {
 	fclose(file);
-	free(file);
 	file = NULL;
 }
 
