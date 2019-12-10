@@ -73,7 +73,7 @@ void append_encodage(unsigned char *chaine, p_encodage enc);
  * @param carac : le caractère à convertir en binaire
  * @param tab_bin : le tableau qui contiendra les bits correspondant du caractère.
  */
-void code_ascii(unsigned char carac, char tab_bin[ASCII_SIZE]);
+void code_ascii(unsigned char carac, unsigned char tab_bin[ASCII_SIZE]);
 
 void binaire(int entier, unsigned char s[ASCII_SIZE]);
 

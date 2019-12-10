@@ -7,7 +7,7 @@ int compress(char *path_to_file)
 	char compressed_filename[256] = {0};
 
 	// Ouvre et copie le contenu du fichier dans m
-	char *m = lire_caractere_fichier("test.txt");
+	unsigned char *m = lire_caractere_fichier("test.txt");
 	printf("%s\n", m);
 
 	p_encodage p_enc = create_encodage();
@@ -33,7 +33,7 @@ int compress(char *path_to_file)
 	// strcpy(compressed_filename, "test.txt");
 	// strcat(compressed_filename, ".huf");
 
-	ecrire_bytes_fichier("result.txt", p_enc->b_enc, strlen(p_enc->b_enc));
+	ecrire_bytes_fichier("result.txt", p_enc->b_enc, strlen((char *)p_enc->b_enc));
 
 	// Libération mémoire
 	destruct_encodage(p_enc);
@@ -46,7 +46,7 @@ int compress(char *path_to_file)
 void compress_encodage(p_encodage p_enc)
 {
 	// Taille encodage en char représentant des bytes donc 8 char pour un byte
-	int length = strlen(p_enc->s_enc);
+	int length = strlen((char *)p_enc->s_enc);
 
 	// Aligne à 8 bits la longueur du résultat
 	int mod = length % 8;
@@ -240,15 +240,15 @@ unsigned char charAt_encodage(int i, p_encodage enc)
 void append_encodage(unsigned char *chaine, p_encodage enc)
 {
 	// Point d'amélioration, utiliser une allocation dynamique de mémoire et utiliser memcpy pour ajouter des éléments
-	int length_enc = strlen(s_encodage(enc));
-	int length = strlen(chaine);
+	int length_enc = strlen((char *)s_encodage(enc));
+	int length = strlen((char *)chaine);
 
 	// Créer un nouvel espace mémoire qui peut contenir toutes les chaines
 	unsigned char *s_new_encodage = (unsigned char *)calloc(length_enc + length + 2, sizeof(unsigned char));
 
 	// Copie les contenus
-	strcpy(s_new_encodage, s_encodage(enc));
-	strcpy(s_new_encodage + length_enc, chaine);
+	memcpy(s_new_encodage, s_encodage(enc), sizeof(unsigned char) * length_enc);
+	memcpy(s_new_encodage + length_enc, chaine, sizeof(unsigned char) * length);
 
 	// Désalloue l'ancien pointeur
 	free(s_encodage(enc));
@@ -259,7 +259,7 @@ void append_encodage(unsigned char *chaine, p_encodage enc)
 // UTILS
 void print_encodage(p_encodage enc)
 {
-	int length = strlen(enc->s_enc);
+	int length = strlen((char *)enc->s_enc);
 	printf("Taille de l'encodage : %d\n", length);
 
 	for (int i = 0; i < length; i++)
@@ -309,14 +309,14 @@ void create_code_arbre(Arbre a, p_encodage enc)
 {
 	if (!est_feuille(a))
 	{
-		append_encodage("0", enc);
+		append_encodage((unsigned char *)"0", enc);
 		create_code_arbre(fils_gauche(a), enc);
 		create_code_arbre(fils_droit(a), enc);
 	}
 	else
 	{
-		append_encodage("1", enc);
-		char c[ASCII_SIZE] = {'0'};
+		append_encodage((unsigned char *)"1", enc);
+		unsigned char c[ASCII_SIZE] = {'0'};
 		code_ascii(racine(a), c);
 		append_encodage(c, enc);
 	}
@@ -325,8 +325,8 @@ void create_code_arbre(Arbre a, p_encodage enc)
 void create_code_texte(p_encodage enc, unsigned char *m)
 {
 	Arbre dico = enc->dico;
-	int length = strlen(m);
-	char code[32] = {0};
+	int length = strlen((char *)m);
+	unsigned char code[32] = {0};
 
 	for (int i = 0; i < length; i++)
 	{
@@ -339,7 +339,7 @@ void frequences(unsigned char *m, p_encodage enc)
 {
 	unsigned int k = 0;
 	int *tab_freq = t_frequences(enc);
-	int length = strlen(m);
+	int length = strlen((char *)m);
 
 	for (int i = 0; i < length; i++)
 	{
