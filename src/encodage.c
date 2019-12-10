@@ -4,27 +4,42 @@
 // COMPRESS
 void compress(p_encodage p_enc)
 {
+	// Taille encodage en char représentant des bytes donc 8 char pour un byte
 	int length = strlen(p_enc->s_enc);
 
-	// Aligne à 8 bits
+	// Aligne à 8 bits la longueur du résultat
 	int mod = length % 8;
 	length += mod;
 	length /= 8;
 
-	p_enc->b_enc = calloc(length, sizeof(byte *));
-	for (int i = 0; i < length; i += 8)
+	// Alloue l'espace mémoire nécessaire pour créer une chaine de byte
+	p_enc->b_enc = calloc(length, sizeof(byte) + 1);
+	int i;
+	for (i = 0; i < length; i++)
 	{
-		if (strlen(p_enc->s_enc + i) < 8)
+
+		char *l = p_enc->s_enc + i * 8;
+		byte *c = char_to_byte(l);
+
+		// Si dernier octet on rempli de 0 les caractères restants
+		if (strlen(l) < 8)
 		{
-			char m_final[8] = {'0'};
-			strcpy(m_final, p_enc->s_enc + i);
-			p_enc->b_enc[i / 8] = char_to_byte(m_final);
+			int p = 0;
+			for (int k = 0; k < 8 - strlen(l); k++)
+			{
+				p += pow(2, k);
+			}
+			*c &= p;
 		}
-		else
-		{
-			p_enc->b_enc[i / 8] = char_to_byte(p_enc->s_enc + i);
-		}
+
+		// Copie de la mémoire
+		memcpy(p_enc->b_enc + i, c, sizeof(byte));
+		free(c);
+		c = NULL;
 	}
+
+	// Ajout du caractère de fin
+	p_enc->b_enc[i] = '\0';
 }
 // COMPRESS
 
@@ -156,10 +171,6 @@ void destruct_encodage(p_encodage enc)
 
 	if (enc && enc->b_enc)
 	{
-		for (int i = 0; i < 9; i++)
-		{
-			free(enc->b_enc[i]);
-		}
 		free(enc->b_enc);
 	}
 
