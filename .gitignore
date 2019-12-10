@@ -58,3 +58,5 @@ src/test_encodage
 src/main
 
 src/test_decodage
+
+src/test_file
