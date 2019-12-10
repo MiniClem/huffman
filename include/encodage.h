@@ -19,7 +19,9 @@ typedef encodage *p_encodage;
 
 static p_encodage create_encodage();
 
-static void compress(p_encodage p_enc);
+int compress(char *path_to_file);
+
+static void compress_encodage(p_encodage p_enc);
 
 /**
  * @brief Crée une liste d'arbre à partir des fréquences contenues dans l'encodage

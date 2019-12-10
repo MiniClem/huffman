@@ -1,8 +1,43 @@
 #include "../include/encodage.h"
 #include "../include/file.h"
 
+//EXTERN
+int compress(char *path_to_file)
+{
+	// Ouvre et copie le contenu du fichier dans m
+	FILE *file = ouvrir_fichier(path_to_file);
+	char *m = lire_caractere_fichier(file);
+
+	p_encodage p_enc = create_encodage();
+
+	// Calcule les fréquences dans le message et les places dans la structure sous forme d'un arbre
+	// unique qui sera par la suite notre dictionnaire pour encode/decoder
+	frequences(m, p_enc);
+	huffman(p_enc);
+
+	// Encodage dico
+	create_code_arbre(p_enc->dico, p_enc);
+	printf("Dico\n");
+	print_encodage(p_enc); // Affichage test
+
+	// Encodage message
+	create_code_texte(p_enc, m);
+	printf("Full\n");
+	print_encodage(p_enc); // Affichage test
+
+	// Compression
+	compress_encodage(p_enc);
+
+	// Libération mémoire
+	destruct_encodage(p_enc);
+
+	return 0;
+}
+//EXTERN
+
 // COMPRESS
-static void compress(p_encodage p_enc)
+static void
+compress_encodage(p_encodage p_enc)
 {
 	// Taille encodage en char représentant des bytes donc 8 char pour un byte
 	int length = strlen(p_enc->s_enc);
@@ -305,33 +340,12 @@ static void frequences(char *m, p_encodage enc)
 	}
 }
 
-/*
 // TESTS
 int main()
 {
 	// Test réel
-	// char *m = "aaabbc";
 	char *filename = "test_encodage.txt";
-	FILE *file = ouvrir_fichier(filename);
-	char *m = lire_caractere_fichier(file);
-
-	p_encodage p_enc = create_encodage();
-	frequences(m, p_enc);
-	huffman(p_enc);
-
-	// Encodage dico
-	create_code_arbre(p_enc->dico, p_enc);
-	print_encodage(p_enc); // Affichage test
-
-	// Encodage message
-	create_code_texte(p_enc, m);
-	print_encodage(p_enc); // Affichage test
-
-	// Compression
-	compress(p_enc);
-
-	// Libération mémoire
-	destruct_encodage(p_enc);
+	compress(filename);
 	// Test réel
 
 	// p_encodage p_enc = create_encodage();
@@ -400,4 +414,3 @@ int main()
 
 	return 0;
 }
-*/
