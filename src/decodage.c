@@ -1,5 +1,6 @@
 #include <string.h>
 #include "../include/decodage.h"
+#include <assert.h>
 
 /*
 
@@ -76,19 +77,27 @@ void decode(char* code, char* clair, Arbre decodage, char* sequence)
 
 char parcours_arbre(char* sequence, Arbre decodage)
 {
-	if (!est_arbre_vide(decodage))
-	{
-		if(est_feuille(decodage)) { 
-			printf("%c",decodage->elt) ;
-			return decodage->elt ;
-		}
-		if(*sequence == '\0') return 0 ;
-		if(decodage->elt == '0'){
-			return parcours_arbre(++sequence, fils_gauche(decodage)) ;
-		}
-		else if(decodage->elt == '1'){
-			return parcours_arbre(++sequence, fils_droit(decodage)) ;
-		}
+	assert(!est_arbre_vide(decodage)) ;
+	if(est_feuille(decodage)) { 
+		printf("on est sur une feuille \n") ;
+		printf("%c",decodage->elt) ;
+		return decodage->elt ;
+	}
+	if(*sequence == '\0'){
+		printf("la séquence est terminée") ;
+		return 0 ;
+	}
+	if(*sequence == '0'){
+		printf("carac : %c\n", *sequence) ;
+		printf("on passe par le 0 \n\n") ;
+		sequence++ ;
+		return parcours_arbre(sequence, fils_gauche(decodage)) ;
+	}
+	else if(*sequence == '1'){
+		printf("carac : %c\n", *sequence) ;
+		printf("on passe par le 1 \n\n") ;
+		sequence++ ;
+		return parcours_arbre(sequence, fils_droit(decodage)) ;
 	}
 
 	return 0 ;
@@ -118,7 +127,7 @@ int main(){
 	/*char* code= "00101100";
 	char* clair = NULL; */
 	
-	parcours_arbre("00",abc) ;
+	parcours_arbre("11",abc) ;
 
 	//decode(code,clair,abc, );
 	
