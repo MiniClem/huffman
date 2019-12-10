@@ -7,13 +7,15 @@ int compress(char *path_to_file)
 	char compressed_filename[256] = {0};
 
 	// Ouvre et copie le contenu du fichier dans m
-	unsigned char *m = lire_caractere_fichier("test.txt");
+	printf("Lecture du contenu du fichier..\n");
+	unsigned char *m = lire_caractere_fichier(path_to_file);
 	printf("%s\n", m);
 
 	p_encodage p_enc = create_encodage();
 
 	// Calcule les fréquences dans le message et les places dans la structure sous forme d'un arbre
 	// unique qui sera par la suite notre dictionnaire pour encode/decoder
+	printf("Calcul de l'arbre par Huffman..\n");
 	frequences(m, p_enc);
 	huffman(p_enc);
 
@@ -30,13 +32,15 @@ int compress(char *path_to_file)
 	// Compression
 	compress_encodage(p_enc);
 
-	// strcpy(compressed_filename, "test.txt");
-	// strcat(compressed_filename, ".huf");
+	strcpy(compressed_filename, "test.txt");
+	strcat(compressed_filename, ".huf");
 
-	ecrire_bytes_fichier("result.txt", p_enc->b_enc, strlen((char *)p_enc->b_enc));
+	printf("Ecriture du fichier compressé..\n");
+	ecrire_bytes_fichier(compressed_filename, p_enc->b_enc, strlen((char *)p_enc->b_enc));
 
 	// Libération mémoire
 	destruct_encodage(p_enc);
+	printf("Compression terminee..\n");
 
 	return 0;
 }
