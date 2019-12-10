@@ -12,7 +12,7 @@
  * Le pointeur sur la chaine de charactère aura avancé et indiqueras désormais 
  * le début de la séquence à décoder
 */
-Arbre lire_dico(char* code);
+Arbre lire_dico(char* code, int compteur);
 
 
 /* 
@@ -20,7 +20,7 @@ Arbre lire_dico(char* code);
  * Correspondant à la traduction des 8bits
 */
 
-Elt lire_ascii(char* octet );
+Elt lire_ascii(char* octet, int compteur );
 
 
 /* 

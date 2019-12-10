@@ -1,5 +1,10 @@
 #include "../include/arbre.h"
 
+Arbre creer_arbre_vide (void)
+{
+  return NULL ;
+}
+
 Arbre creer_arbre(Elt x, int poid, Arbre fg, Arbre fd)
 {
 	Noeud *nouveau;

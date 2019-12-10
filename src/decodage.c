@@ -16,6 +16,11 @@ Arbre lire_dico(char* code)
 		filsdroit = lire_dico(code+compteur);
 		;
 
+		filsgauche = lire_dico(code,++compteur);
+		filsdroit = lire_dico(code,++compteur);
+
+		Pere=creer_arbre(' ', 0 , filsgauche, filsdroit) ;
+
 	}else{
 		
 		Pere = creer_arbre(lire_ascii(code+compteur),0,NULL,NULL);
@@ -25,7 +30,7 @@ Arbre lire_dico(char* code)
 }
  */
 
-Elt lire_ascii(char* octet)
+Elt lire_ascii(char* octet,int compteur)
 {
 	
 	int valeur =0;
@@ -34,7 +39,7 @@ Elt lire_ascii(char* octet)
 		if (*octet=='1'){
 			valeur += pow(2,i);
 		}
-		octet++;		
+		compteur++;		
 	}
 	Elt ascii = (Elt)valeur;
 	printf("%c \n",valeur);

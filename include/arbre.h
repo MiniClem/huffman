@@ -13,6 +13,7 @@ typedef struct noeud
 
 typedef struct noeud *Arbre;
 
+Arbre creer_arbre_vide (void) ;
 Arbre creer_arbre(Elt x, int poid, Arbre fg, Arbre fd);
 Arbre detruire_arbre(Arbre a);
 
