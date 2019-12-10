@@ -17,7 +17,7 @@ void fermer_fichier(FILE *file)
 
 char *lire_caractere_fichier(char *file)
 {
-	
+
 	FILE *fichier = ouvrir_fichier(file);
 	int size;
 	char *caracterelu;
@@ -33,7 +33,7 @@ char *lire_caractere_fichier(char *file)
 	for (int i = 0; i < size; i++)
 	{
 		caracterelu[i] = (char)fgetc(fichier); // On lit le caractère
-	}										// On continue tant que fgetc n'a pas retourné EOF (fin de file)
+	}										   // On continue tant que fgetc n'a pas retourné EOF (fin de file)
 	caracterelu[size] = '\0';
 
 	fermer_fichier(fichier);
@@ -78,21 +78,19 @@ char *byte_to_char(byte byte_to_convert)
 	return str;
 }
 
-void ecrire_caractere_fichier(char* filename,char* message, int size){ //ecrit dans le fichier de nom filename , le message compréser
+void ecrire_caractere_fichier(char *filename, char *message, int size)
+{ //ecrit dans le fichier de nom filename , le message compréser
 	FILE *fichier = ouvrir_fichier(filename);
 
 	fwrite(message, sizeof(char), size, fichier);
 	//fputs(message,fichier);
 	fermer_fichier(fichier);
-	
 }
 
-void ecrire_bytes_fichier(char* filename,byte* message, int size){
-	ecrire_caractere_fichier(filename,message,size);
-
+void ecrire_bytes_fichier(char *filename, byte *message, int size)
+{
+	ecrire_caractere_fichier(filename, message, size);
 }
-
-
 
 int main()
 {
@@ -111,20 +109,20 @@ int main()
 	// FILE* fichier = NULL;
 	// fichier = fopen("test.txt", "r");
 	// if (fichier != NULL)
-    // {
+	// {
 	// printf("%s",lire_caractere_fichier(fichier));
 	// }
-    // else
-    // {
-    //     // On affiche un message d'erreur si on veut
-    //     printf("Impossible d'ouvrir le file test.txt");
-    // }
-	
+	// else
+	// {
+	//     // On affiche un message d'erreur si on veut
+	//     printf("Impossible d'ouvrir le file test.txt");
+	// }
+
 	// byte *test = char_to_byte(c);
 	// char *test_c = byte_to_char(b);
 	// printf("%c\n", test[0]);
 	// printf("%s\n", test_c);
 
-	ecrire_caractere_fichier(file,c,strlen(c));
+	ecrire_caractere_fichier(file, c, strlen(c));
 	return 0;
 }
