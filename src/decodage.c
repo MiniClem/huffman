@@ -1,3 +1,4 @@
+#include <string.h>
 #include "../include/decodage.h"
 
 /*
@@ -46,13 +47,11 @@ Elt lire_ascii(char* octet,int compteur)
 	return ascii;
 }
 
-void decode(char* code, char* clair, Arbre decodage)
+void decode(char* code, char* clair, Arbre decodage, char* sequence)
 {
-	char* sequence;
 	int i=0,j=0;
 	while(*code != '\0'){
-		
-		*sequence = *code;
+		append_char(sequence, code);
 		i+=1;
 		j+=1;
 		printf("i= %d , j= %d *code=%c\n",i,j,*code) ;
@@ -81,7 +80,7 @@ char parcours_arbre(char* sequence, Arbre decodage)
 	{
 		if(est_feuille(decodage)) return decodage-> elt ;
 		
-		if(*(sequence+1)='\0') return 0 ;
+		if(*(sequence+1)=='\0') return 0 ;
 
 		printf("parcours arbre chillin \n") ;
 		
@@ -91,9 +90,20 @@ char parcours_arbre(char* sequence, Arbre decodage)
 	}
 }
 
+static char* append_char(char* out_c, char app){
+	int size = strlen(out_c) + 2;
+	char* new_c = malloc(size); // Nouvelle allocation mémoire
+
+	strcpy(new_c, out_c); 	// Copie première s
+	new_c[size -2] = app;		// Copie seconde s
+	new_c[size - 1] = '\0';
+	return new_c;
+}
+
 // TESTS
 int main(){
 	//char* code = "00010100000110100001110110010100101101001101100111";
+	/*
 	Arbre a = creer_arbre('a',0,NULL,NULL);
 	Arbre b = creer_arbre('b',0,NULL,NULL);
 	Arbre ab = creer_arbre('0',0,a,b);
@@ -101,11 +111,10 @@ int main(){
 	Arbre abc = creer_arbre('0',0,ab,c);
 	
 	char* code= "00101100";
-
 	char* clair = NULL;
-
-
-	decode(code,clair,abc);
+	
+	decode(code,clair,abc, );
+	*/
 	/*
 	while (*clair = '\0')
 	{
@@ -113,5 +122,14 @@ int main(){
 		clair++;
 	}
 	*/
+	char* code = malloc(3 * sizeof(char)) ;
+	code[0] = '1';
+	code[1] = '0';
+	code[2] = '\0';
+
+	char app = '1';
+	code = append_char(code, app);
+
+	printf("%s\n", code);
 	return  0;
 }
