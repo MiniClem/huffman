@@ -51,7 +51,7 @@ void decode(char* code, char* clair, Arbre decodage, char* sequence)
 {
 	int i=0,j=0;
 	while(*code != '\0'){
-		append_char(sequence, code);
+		sequence = append_char(sequence, *code);
 		i+=1;
 		j+=1;
 		printf("i= %d , j= %d *code=%c\n",i,j,*code) ;
@@ -97,6 +97,7 @@ static char* append_char(char* out_c, char app){
 	strcpy(new_c, out_c); 	// Copie première s
 	new_c[size -2] = app;		// Copie seconde s
 	new_c[size - 1] = '\0';
+	free(out_c);
 	return new_c;
 }
 
@@ -131,5 +132,6 @@ int main(){
 	code = append_char(code, app);
 
 	printf("%s\n", code);
+	free(code);
 	return  0;
 }
