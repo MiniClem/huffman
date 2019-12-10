@@ -2,9 +2,11 @@
 #include <stdlib.h>
 #include "../include/file.h"
 
-FILE *ouvrir_fichier(char *filename)
+// mode écriture : "w"
+// mode lecture : "r"
+FILE *ouvrir_fichier(char *filename, char *mode)
 {
-	FILE *fichier = fopen(filename, "w");
+	FILE *fichier = fopen(filename, mode);
 	assert(fichier != NULL);
 	return fichier;
 }
@@ -18,7 +20,7 @@ void fermer_fichier(FILE *file)
 char *lire_caractere_fichier(char *file)
 {
 
-	FILE *fichier = ouvrir_fichier(file);
+	FILE *fichier = ouvrir_fichier(file, "r");
 	int size;
 	char *caracterelu;
 
@@ -80,7 +82,7 @@ char *byte_to_char(byte byte_to_convert)
 
 void ecrire_caractere_fichier(char *filename, char *message, int size)
 { //ecrit dans le fichier de nom filename , le message compréser
-	FILE *fichier = ouvrir_fichier(filename);
+	FILE *fichier = ouvrir_fichier(filename, "w");
 
 	fwrite(message, sizeof(char), size, fichier);
 	//fputs(message,fichier);
@@ -92,6 +94,7 @@ void ecrire_bytes_fichier(char *filename, byte *message, int size)
 	ecrire_caractere_fichier(filename, message, size);
 }
 
+/*
 int main()
 {
 	// FICHIER
@@ -126,3 +129,4 @@ int main()
 	ecrire_caractere_fichier(file, c, strlen(c));
 	return 0;
 }
+*/

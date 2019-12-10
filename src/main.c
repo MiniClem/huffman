@@ -15,10 +15,11 @@ static void menu()
 	afficher_chaine("choix : \n");
 }
 
-int main()
+int main(int argc, char **argv)
 {
 	int err = 0;
 	int choix;
+	strcpy(path, argv[0]);
 
 	menu();
 	choix = lire_entier();
@@ -31,7 +32,7 @@ int main()
 			break;
 
 		case 2:
-			// compress(path);
+			compress_selected(path);
 			break;
 
 		case 3:

@@ -6,7 +6,7 @@
 
 typedef char byte;
 
-FILE *ouvrir_fichier(char *filename);
+FILE *ouvrir_fichier(char *filename, char *mode);
 void fermer_fichier(FILE *file);
 
 char *lire_caractere_fichier(char *file);
