@@ -26,7 +26,11 @@ Elt lire_ascii(char* octet );
 /* 
  * Renvoie le texte clair à partir du texte compressé et de l'arbre de décodage des caratères
  */
-void decode(char* code,char * clair, Arbre decodage);
+void decode(char* code, char* clair, Arbre decodage);
 
+/*
+ * Parcoure l'arbre pendant le décodage de la chaine de caractères 
+ */
+char parcours_arbre(char* sequence, Arbre decodage);
 
 #endif

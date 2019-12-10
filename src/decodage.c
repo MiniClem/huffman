@@ -1,6 +1,6 @@
 #include "../include/decodage.h"
 
-
+/*
 
 Arbre lire_dico(char* code)
 {
@@ -23,7 +23,7 @@ Arbre lire_dico(char* code)
 	}
 	return Pere;
 }
- 
+ */
 
 Elt lire_ascii(char* octet)
 {
@@ -43,31 +43,70 @@ Elt lire_ascii(char* octet)
 
 void decode(char* code, char* clair, Arbre decodage)
 {
-	if(est_feuille(decodage){
-		*clair = decodage->elt;
-		clair++;
-		return;
-
-	}else if (*code == '\0'){
-		return
-	}
-	
-	
-	if(*code=='0')
-	{
-		decode(++code , clair, fils_gauche(decodage));
+	char* sequence;
+	int i=0,j=0;
+	while(*code != '\0'){
 		
-	}else{
-		decode(++code , clair, fils_droit(decodage));
+		*sequence = *code;
+		i+=1;
+		j+=1;
+		printf("i= %d , j= %d *code=%c\n",i,j,*code) ;
+
+		if(parcours_arbre(sequence,decodage) != 0){
+			printf("if ok \n") ;	
+			sequence -= i ;
+			i = 0 ;  
+
+			*clair = parcours_arbre(sequence,decodage);
+			printf("%c",parcours_arbre(sequence,decodage));
+			clair++;
+				
+		}
+		code++;
 	}
+	*clair='\0';
+
 	return;
 }
 
 
+char parcours_arbre(char* sequence, Arbre decodage)
+{
+	if (!est_arbre_vide(decodage))
+	{
+		if(est_feuille(decodage)) return decodage-> elt ;
+		
+		if(*(sequence+1)='\0') return 0 ;
+
+		printf("parcours arbre chillin \n") ;
+		
+		sequence++ ;
+		if(*(sequence)=='0') return (parcours_arbre(sequence,fils_gauche(decodage))) ;
+		return(parcours_arbre(sequence, fils_droit(decodage))) ;
+	}
+}
+
 // TESTS
 int main(){
-	char* code = "00010100000110100001110110010100101101001101100111";
-	//Arbre d = lire_dico(code);
+	//char* code = "00010100000110100001110110010100101101001101100111";
+	Arbre a = creer_arbre('a',0,NULL,NULL);
+	Arbre b = creer_arbre('b',0,NULL,NULL);
+	Arbre ab = creer_arbre('0',0,a,b);
+	Arbre c = creer_arbre('c',0,NULL,NULL);
+	Arbre abc = creer_arbre('0',0,ab,c);
 	
+	char* code= "00101100";
+
+	char* clair = NULL;
+
+
+	decode(code,clair,abc);
+	/*
+	while (*clair = '\0')
+	{
+		printf("%c",*clair);
+		clair++;
+	}
+	*/
 	return  0;
 }
