@@ -9,7 +9,7 @@ typedef char byte;
 FILE *ouvrir_fichier(char *filename);
 void fermer_fichier(FILE *file);
 
-char *lire_caractere_fichier(FILE *file);
+char *lire_caractere_fichier(char *file);
 
 /// TODO
 // void ecrire_bit(FILE *file, char bit);
