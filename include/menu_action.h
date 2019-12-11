@@ -13,4 +13,6 @@ int choose_path(char *out_c);
 int compress_selected(char *path_to_file);
 // int uncompress(char * path_to_file);
 
+void help();
+
 #endif

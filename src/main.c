@@ -10,6 +10,7 @@ static void menu()
 	printf(" 1 : Choisir un chemin ver le fichier à compresser/decompresser\n\tActuel : %s\n", path);
 	afficher_chaine(" 2 : Compresser \n");
 	afficher_chaine(" 3 : Decompresser \n");
+	afficher_chaine(" 4 : Aide \n");
 	afficher_chaine(" 0 : Quitter \n");
 	afficher_chaine("\n");
 	afficher_chaine("choix : \n");
@@ -37,6 +38,10 @@ int main(int argc, char **argv)
 
 		case 3:
 			// uncompress(path);
+			break;
+
+		case 4:
+			help();
 			break;
 		}
 		menu();

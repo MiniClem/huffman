@@ -84,6 +84,7 @@ void ecrire_caractere_fichier(char *filename, unsigned char *message, int size)
 { //ecrit dans le fichier de nom filename , le message compréser
 	FILE *fichier = ouvrir_fichier(filename, "w");
 
+	printf("Ecriture de %d octets dans %s\n", size, filename);
 	fwrite(message, sizeof(unsigned char), size, fichier);
 	//fputs(message,fichier);
 	fermer_fichier(fichier);

@@ -13,6 +13,7 @@ typedef struct encodage
 {
 	unsigned char *s_enc;
 	byte *b_enc;
+	int b_length;
 	Arbre dico;
 	int *tab_frequences;
 } encodage;

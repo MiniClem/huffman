@@ -32,11 +32,11 @@ int compress(char *path_to_file)
 	// Compression
 	compress_encodage(p_enc);
 
-	strcpy(compressed_filename, "test.txt");
+	strcpy(compressed_filename, path_to_file);
 	strcat(compressed_filename, ".huf");
 
 	printf("Ecriture du fichier compressé..\n");
-	ecrire_bytes_fichier(compressed_filename, p_enc->b_enc, strlen((char *)p_enc->b_enc));
+	ecrire_bytes_fichier(compressed_filename, p_enc->b_enc, p_enc->b_length - 1); // On écrit tout sauf le bit de fin de chaine de caractère
 
 	// Libération mémoire
 	destruct_encodage(p_enc);
@@ -58,9 +58,10 @@ void compress_encodage(p_encodage p_enc)
 	length /= 8;
 
 	// Alloue l'espace mémoire nécessaire pour créer une chaine de byte
-	p_enc->b_enc = calloc(length, sizeof(byte) + 1);
+	p_enc->b_length = length + 1;
+	p_enc->b_enc = calloc(p_enc->b_length, sizeof(byte));
 	int i;
-	for (i = 0; i < length; i++)
+	for (i = 0; i < p_enc->b_length; i++)
 	{
 		byte *c = char_to_byte(p_enc->s_enc + i * 8);
 
@@ -188,6 +189,7 @@ p_encodage create_encodage()
 	enc->s_enc = malloc(sizeof(char));
 	enc->s_enc[0] = '\0';
 	enc->b_enc = NULL; // Init lors de son utilisation
+	enc->b_length = 0;
 	enc->dico = NULL;
 	enc->tab_frequences = calloc(NB_ASCII, sizeof(int));
 	return enc;
