@@ -63,19 +63,12 @@ on relance la boucle
 unsigned char* decode(unsigned char* code, unsigned char* clair, Arbre decodage, unsigned char* sequence)
 {
 	while(*code != '\0'){
-												printf("on ajoute %c dans sequence\n",*code) ;
-		
+			
 		sequence = unsigned_append_char(sequence, *code);
-		
-												printf("*code=%c\n\n",*code) ;
-												printf("sequence : %s\n",sequence) ;
 		char c = parcours_arbre(sequence,decodage,0);
-												printf("parcours arbre retourne = %c \n",c) ;
+
 		if(c != 0){
-												printf("if ok \n") ;	
 			clair = unsigned_append_char(clair,c);
-			printf("post if ok\n") ;
-			printf("clair : %s\n",clair) ;
 			free(sequence) ;
 			sequence=malloc(sizeof(unsigned char *)) ;
 			sequence[0]='\0' ;
@@ -91,24 +84,17 @@ char parcours_arbre(unsigned char* sequence, Arbre decodage, int i)
 {
 	assert(!est_arbre_vide(decodage)) ;
 	if(est_feuille(decodage)) { 
-		printf("on est sur une feuille \n") ;
-		printf("ON RETOURNE %c\n",decodage->elt) ;
 		return decodage->elt ;
 	}
 	if(sequence[i] == '\0'){
-	//	printf("la sequence est terminee ON RETOURNE ZERO \n") ;
 		return 0 ;
 	}
 
 
 	if(sequence[i] == '0'){
-	//	printf("carac : %c\n", sequence[i]) ;
-	//	printf("on passe par le 0 \n\n") ;
 		return parcours_arbre(sequence, fils_gauche(decodage),++i) ;
 	}
 	else{
-	//	printf("carac : %c\n", sequence[i]) ;
-	//	printf("on passe par le 1 \n\n") ;
 		return parcours_arbre(sequence, fils_droit(decodage),++i) ;
 	}
 
