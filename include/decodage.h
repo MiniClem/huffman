@@ -7,20 +7,20 @@
 
 
 /* 
- * Prend en argument la chaine de charactère comportant que des '0' et '1';
+ * Prend en argument la chaine de caractère comportant que des '0' et '1';
  * Retourne l'arbre permettant de décoder le texte;
- * Le pointeur sur la chaine de charactère aura avancé et indiqueras désormais 
+ * Le pointeur sur la chaine de caractère aura avancé et indiqueras désormais 
  * le début de la séquence à décoder
 */
-Arbre lire_dico(char* code, int compteur);
+Arbre lire_dico(char* code);
 
 
 /* 
- * Renvoie le code ascii dans un int corespondant à une chaine de charactères de 8 octets 
+ * Renvoie le code ascii dans un int corespondant à une chaine de caractères de 8 octets 
  * Correspondant à la traduction des 8bits
 */
 
-Elt lire_ascii(char* octet, int compteur );
+Elt lire_ascii(unsigned char* octet, int compteur );
 
 
 /* 
@@ -33,7 +33,7 @@ Elt lire_ascii(char* octet, int compteur );
  * on met le caractère dans clair. Si on n'arrive pas à une feuille,
  * on relance la boucle
  */
-void decode(char* code, char* clair, Arbre decodage, char* sequence);
+unsigned char * decode(unsigned char* code, unsigned char* clair, Arbre decodage, unsigned char* sequence);
 
 /*
  * Parcourt l'arbre pendant le décodage de la chaine de caractères 
@@ -41,9 +41,10 @@ void decode(char* code, char* clair, Arbre decodage, char* sequence);
 	si on rencontre un 1, appel récursif sur le fils droit
 	si c'est une feuille, on affiche le caractère
  */
-char parcours_arbre(char* sequence, Arbre decodage, int i);
+char parcours_arbre(unsigned char* sequence, Arbre decodage, int i);
 
-static char* append_char(char* out_c, char app);
+char* append_char(char* out_c, char app);
+unsigned char* unsigned_append_char(unsigned char* out_c, char app);
 
 
 #endif
