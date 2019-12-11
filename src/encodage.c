@@ -40,6 +40,7 @@ int compress(char *path_to_file)
 
 	// Libération mémoire
 	destruct_encodage(p_enc);
+	free(m);
 	printf("Compression terminee..\n");
 
 	return 0;
@@ -79,25 +80,24 @@ void compress_encodage(p_encodage p_enc)
 // DICO
 Arbre *creer_liste_arbre(p_encodage enc, int *size)
 {
+	*size = 0;
 	Arbre *t_noeud;
 	Arbre n;
 	int *tab_frequence = enc->tab_frequences;
 	Arbre temp_noeuds[NB_ASCII] = {0};
-	int j = 0;
 
 	// On calcule le nombre de valeurs non nulle
 	for (int i = 0; i < NB_ASCII; i++)
 	{
 		if (tab_frequence[i] != 0)
 		{
-			n = creer_arbre((char)i, tab_frequence[i], NULL, NULL);
-			temp_noeuds[j++] = n;
-			*size += 1;
+			n = creer_arbre((unsigned char)i, tab_frequence[i], NULL, NULL);
+			temp_noeuds[size[0]++] = n;
 		}
 	}
 
 	// Allocation de la mémoire pour le tableau de noeud
-	t_noeud = (Arbre *)calloc(*size, sizeof(Arbre));
+	t_noeud = malloc(sizeof(Arbre) * (size[0] - 1));
 	// Copie de la mémoire de temp jusqu'au final
 	memcpy(t_noeud, temp_noeuds, sizeof(Arbre) * *size);
 
@@ -343,15 +343,12 @@ void create_code_texte(p_encodage enc, unsigned char *m)
 
 void frequences(unsigned char *m, p_encodage enc)
 {
-	unsigned int k = 0;
 	int *tab_freq = t_frequences(enc);
 	int length = strlen((char *)m);
 
 	for (int i = 0; i < length; i++)
 	{
-		k = (unsigned int)m[i];
-		printf("%d\n", k);
-		tab_freq[k]++;
+		tab_freq[(unsigned int)m[i]]++;
 	}
 }
 
