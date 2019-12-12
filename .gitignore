@@ -56,3 +56,5 @@ dkms.conf
 src/test_encodage
 
 src/test_decodage
+
+src/file.c
