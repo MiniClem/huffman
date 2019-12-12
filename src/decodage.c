@@ -118,10 +118,43 @@ char* append_char(char* out_c, char app){
 	return new_c;
 }
 
+
+
+void decompressage( char* filename){
+	
+	unsigned char* fichier = byte_to_char(lire_caractere_fichier(filename));
+	int ind = 0;
+	Arbre a = lire_dico(fichier,&ind);
+	
+	unsigned char * clair = malloc(sizeof(unsigned char *));
+	clair[0] = '\0' ;
+	
+	unsigned char* sequence = malloc(sizeof(unsigned char *)) ;
+	sequence[0] = '\0'; 
+	
+	unsigned char* decompresse = decode(fichier,clair,a,sequence);
+	
+	free(clair);
+	free(sequence);
+	
+	int size = strlen(filename);
+	filename[size-4] = 't';
+	filename[size-3] = 'x';
+	filename[size-2] = 't';
+	filename[size-1] = '\0';
+	
+	
+	ecrire_caractere_fichier(filename, decompresse, strlen(decompresse) ;)
+	
+
+}
+
 // TESTS
 int main(){
 	unsigned char* code = (unsigned char *)"0010110000110110001001011000110101100100101100101"; //aaaabbbccde
 	int ind = 0;
+
+
 	
 	//Arbre a = creer_arbre('a',0,NULL,NULL);
 	//Arbre b = creer_arbre('b',0,NULL,NULL);
