@@ -7,12 +7,15 @@ int compress(char *path_to_file)
 	char compressed_filename[256] = {0};
 
 	// Ouvre et copie le contenu du fichier dans m
-	char *m = lire_caractere_fichier(path_to_file);
+	printf("Lecture du contenu du fichier..\n");
+	unsigned char *m = lire_caractere_fichier(path_to_file);
+	printf("%s\n", m);
 
 	p_encodage p_enc = create_encodage();
 
 	// Calcule les fréquences dans le message et les places dans la structure sous forme d'un arbre
 	// unique qui sera par la suite notre dictionnaire pour encode/decoder
+	printf("Calcul de l'arbre par Huffman..\n");
 	frequences(m, p_enc);
 	huffman(p_enc);
 
@@ -32,21 +35,23 @@ int compress(char *path_to_file)
 	strcpy(compressed_filename, path_to_file);
 	strcat(compressed_filename, ".huf");
 
-	ecrire_bytes_fichier(compressed_filename, p_enc->b_enc, strlen(p_enc->b_enc));
+	printf("Ecriture du fichier compressé..\n");
+	ecrire_bytes_fichier(compressed_filename, p_enc->b_enc, p_enc->b_length - 1); // On écrit tout sauf le bit de fin de chaine de caractère
 
 	// Libération mémoire
 	destruct_encodage(p_enc);
+	free(m);
+	printf("Compression terminee..\n");
 
 	return 0;
 }
 //EXTERN
 
 // COMPRESS
-static void
-compress_encodage(p_encodage p_enc)
+void compress_encodage(p_encodage p_enc)
 {
 	// Taille encodage en char représentant des bytes donc 8 char pour un byte
-	int length = strlen(p_enc->s_enc);
+	int length = strlen((char *)p_enc->s_enc);
 
 	// Aligne à 8 bits la longueur du résultat
 	int mod = length % 8;
@@ -54,9 +59,10 @@ compress_encodage(p_encodage p_enc)
 	length /= 8;
 
 	// Alloue l'espace mémoire nécessaire pour créer une chaine de byte
-	p_enc->b_enc = calloc(length, sizeof(byte) + 1);
+	p_enc->b_length = length + 1;
+	p_enc->b_enc = calloc(p_enc->b_length, sizeof(byte));
 	int i;
-	for (i = 0; i < length; i++)
+	for (i = 0; i < p_enc->b_length; i++)
 	{
 		byte *c = char_to_byte(p_enc->s_enc + i * 8);
 
@@ -72,34 +78,33 @@ compress_encodage(p_encodage p_enc)
 // COMPRESS
 
 // DICO
-static Arbre *creer_liste_arbre(p_encodage enc, int *size)
+Arbre *creer_liste_arbre(p_encodage enc, int *size)
 {
+	*size = 0;
 	Arbre *t_noeud;
 	Arbre n;
 	int *tab_frequence = enc->tab_frequences;
-	Arbre temp_noeuds[255] = {0};
-	int j = 0;
+	Arbre temp_noeuds[NB_ASCII] = {0};
 
 	// On calcule le nombre de valeurs non nulle
-	for (int i = 0; i < 255; i++)
+	for (int i = 0; i < NB_ASCII; i++)
 	{
 		if (tab_frequence[i] != 0)
 		{
-			n = creer_arbre((char)i, tab_frequence[i], NULL, NULL);
-			temp_noeuds[j++] = n;
-			*size += 1;
+			n = creer_arbre((unsigned char)i, tab_frequence[i], NULL, NULL);
+			temp_noeuds[size[0]++] = n;
 		}
 	}
 
 	// Allocation de la mémoire pour le tableau de noeud
-	t_noeud = (Arbre *)calloc(*size, sizeof(Arbre));
+	t_noeud = malloc(sizeof(Arbre) * (size[0] - 1));
 	// Copie de la mémoire de temp jusqu'au final
 	memcpy(t_noeud, temp_noeuds, sizeof(Arbre) * *size);
 
 	return t_noeud;
 }
 
-static int trouver_combiner(Arbre *l, int size)
+int trouver_combiner(Arbre *l, int size)
 {
 	int pos_a = 0, pos_b = 0;
 	Arbre a = NULL;
@@ -149,14 +154,14 @@ static int trouver_combiner(Arbre *l, int size)
 	return 1;
 }
 
-static void huffman(p_encodage enc)
+void huffman(p_encodage enc)
 {
 	int size = 0;
 	Arbre *t_arbre = creer_liste_arbre(enc, &size);
 	enc->dico = huffman_merge(t_arbre, size);
 }
 
-static Arbre huffman_merge(Arbre *l, int size)
+Arbre huffman_merge(Arbre *l, int size)
 {
 	int is_working = 1;
 
@@ -178,18 +183,19 @@ static Arbre huffman_merge(Arbre *l, int size)
 // DICO
 
 // CONSTR/DESTR
-static p_encodage create_encodage()
+p_encodage create_encodage()
 {
 	p_encodage enc = (p_encodage)malloc(sizeof(encodage));
 	enc->s_enc = malloc(sizeof(char));
 	enc->s_enc[0] = '\0';
 	enc->b_enc = NULL; // Init lors de son utilisation
+	enc->b_length = 0;
 	enc->dico = NULL;
-	enc->tab_frequences = calloc(255, sizeof(int));
+	enc->tab_frequences = calloc(NB_ASCII, sizeof(int));
 	return enc;
 }
 
-static void destruct_encodage(p_encodage enc)
+void destruct_encodage(p_encodage enc)
 {
 	if (enc && enc->s_enc)
 	{
@@ -222,34 +228,33 @@ static void destruct_encodage(p_encodage enc)
 // CONSTR/DESTR
 
 // GET/SET
-static char *s_encodage(p_encodage enc)
+unsigned char *s_encodage(p_encodage enc)
 {
 	return enc->s_enc;
 }
 
-static int *t_frequences(p_encodage enc)
+int *t_frequences(p_encodage enc)
 {
 	return enc->tab_frequences;
 }
 
-static char charAt_encodage(int i, p_encodage enc)
+unsigned char charAt_encodage(int i, p_encodage enc)
 {
-	const char c = s_encodage(enc)[i];
-	return c;
+	return s_encodage(enc)[i];
 }
 
-static void append_encodage(char *chaine, p_encodage enc)
+void append_encodage(unsigned char *chaine, p_encodage enc)
 {
 	// Point d'amélioration, utiliser une allocation dynamique de mémoire et utiliser memcpy pour ajouter des éléments
-	int length_enc = strlen(s_encodage(enc));
-	int length = strlen(chaine);
+	int length_enc = strlen((char *)s_encodage(enc));
+	int length = strlen((char *)chaine);
 
 	// Créer un nouvel espace mémoire qui peut contenir toutes les chaines
-	char *s_new_encodage = (char *)calloc(length_enc + length + 2, sizeof(char));
+	unsigned char *s_new_encodage = (unsigned char *)calloc(length_enc + length + 2, sizeof(unsigned char));
 
 	// Copie les contenus
-	strcpy(s_new_encodage, s_encodage(enc));
-	strcpy(s_new_encodage + length_enc, chaine);
+	memcpy(s_new_encodage, s_encodage(enc), sizeof(unsigned char) * length_enc);
+	memcpy(s_new_encodage + length_enc, chaine, sizeof(unsigned char) * length);
 
 	// Désalloue l'ancien pointeur
 	free(s_encodage(enc));
@@ -258,9 +263,9 @@ static void append_encodage(char *chaine, p_encodage enc)
 // GET/SET
 
 // UTILS
-static void print_encodage(p_encodage enc)
+void print_encodage(p_encodage enc)
 {
-	int length = strlen(enc->s_enc);
+	int length = strlen((char *)enc->s_enc);
 	printf("Taille de l'encodage : %d\n", length);
 
 	for (int i = 0; i < length; i++)
@@ -271,7 +276,7 @@ static void print_encodage(p_encodage enc)
 	printf("\n");
 }
 
-static void binaire(int entier, char s[ASCII_SIZE])
+void binaire(int entier, unsigned char s[ASCII_SIZE])
 {
 	int pt = 0;
 	int puissance;
@@ -300,34 +305,34 @@ static void binaire(int entier, char s[ASCII_SIZE])
 	s[pt] = '\0';
 }
 
-static void code_ascii(char c, char *c_tab)
+void code_ascii(unsigned char c, unsigned char *c_tab)
 {
 	binaire((int)c, c_tab);
 }
 // UTILS
 
-static void create_code_arbre(Arbre a, p_encodage enc)
+void create_code_arbre(Arbre a, p_encodage enc)
 {
 	if (!est_feuille(a))
 	{
-		append_encodage("0", enc);
+		append_encodage((unsigned char *)"0", enc);
 		create_code_arbre(fils_gauche(a), enc);
 		create_code_arbre(fils_droit(a), enc);
 	}
 	else
 	{
-		append_encodage("1", enc);
-		char c[ASCII_SIZE] = {'0'};
+		append_encodage((unsigned char *)"1", enc);
+		unsigned char c[ASCII_SIZE] = {'0'};
 		code_ascii(racine(a), c);
 		append_encodage(c, enc);
 	}
 }
 
-static void create_code_texte(p_encodage enc, char *m)
+void create_code_texte(p_encodage enc, unsigned char *m)
 {
 	Arbre dico = enc->dico;
-	int length = strlen(m);
-	char code[32] = {0};
+	int length = strlen((char *)m);
+	unsigned char code[32] = {0};
 
 	for (int i = 0; i < length; i++)
 	{
@@ -336,16 +341,18 @@ static void create_code_texte(p_encodage enc, char *m)
 	}
 }
 
-static void frequences(char *m, p_encodage enc)
+void frequences(unsigned char *m, p_encodage enc)
 {
 	int *tab_freq = t_frequences(enc);
-	int length = strlen(m);
+	int length = strlen((char *)m);
+
 	for (int i = 0; i < length; i++)
 	{
 		tab_freq[(unsigned int)m[i]]++;
 	}
 }
 
+/*
 // TESTS
 int main()
 {
@@ -420,3 +427,4 @@ int main()
 
 	return 0;
 }
+*/

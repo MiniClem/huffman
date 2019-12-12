@@ -9,13 +9,13 @@ IDIR = ../include
 ODIR = obj
 
 # Ajouter les .h dans _DEPS puis décommenter les 2 lignes
-_DEPS = liste.h liste_ext.h arbre.h encodage.h file.h interface.h
+_DEPS = liste.h liste_ext.h arbre.h encodage.h file.h interface.h menu_action.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
 LIBS=-lm	
 
 # Les fichiers objets
-_OBJ = main.o file.o encodage.o liste.o liste_ext.o arbre.o encodage.o interface.o
+_OBJ = main.o file.o encodage.o liste.o liste_ext.o arbre.o encodage.o interface.o menu_action.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 _ENC_TEST_OBJ = encodage.o liste.o liste_ext.o arbre.o file.o interface.o
