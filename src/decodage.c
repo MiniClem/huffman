@@ -2,46 +2,39 @@
 #include "../include/decodage.h"
 #include <assert.h>
 
-/*
 
-Arbre lire_dico(char* code)
-{
-	static int compteur=0;
-	Arbre Pere = (Arbre)malloc(sizeof(Noeud));
-	Arbre filsgauche = (Arbre)malloc(sizeof(Noeud));
-	Arbre filsdroit = (Arbre)malloc(sizeof(Noeud));
-	if (*(code+compteur)=='0')
-	{
-		compteur ++;
-		filsgauche = lire_dico(code+compteur);
-		
-		filsdroit = lire_dico(code+compteur);
-		;
 
-		filsgauche = lire_dico(code,++compteur);
-		filsdroit = lire_dico(code,++compteur);
-
-		Pere=creer_arbre(' ', 0 , filsgauche, filsdroit) ;
-
+Arbre lire_dico(unsigned char* code , int * ind){
+	Arbre a = NULL;
+	Arbre fg , fd;
+	char c = code[*ind];
+	if(c == '0'){
+		(*ind)+=1;
+		fg = lire_dico(code,ind);
+		(*ind)+=1;
+		fd = lire_dico(code, ind);
+		return creer_arbre('\0',0,fg,fd);
+	}else if (c == '1'){
+		(*ind)+=1;
+		a = creer_arbre(lire_ascii((unsigned char*)code + (*ind)),0,NULL,NULL);
+		(*ind)+=7;
+		return a ;
 	}else{
-		
-		Pere = creer_arbre(lire_ascii(code+compteur),0,NULL,NULL);
-		
+		return NULL;
 	}
-	return Pere;
-}
- */
 
-Elt lire_ascii(unsigned char* octet,int compteur)
+}
+
+
+Elt lire_ascii(unsigned char* octet)
 {
 	
 	int valeur =0;
 	int i ; 
 	for(i=7; i>=0;i--){
-		if (*octet=='1'){
+		if (octet[7-i]=='1'){
 			valeur += pow(2,i);
 		}
-		compteur++;		
 	}
 	Elt ascii = (Elt)valeur;
 	printf("%c \n",valeur);
@@ -66,7 +59,7 @@ unsigned char* decode(unsigned char* code, unsigned char* clair, Arbre decodage,
 			
 		sequence = unsigned_append_char(sequence, *code);
 		char c = parcours_arbre(sequence,decodage,0);
-
+		printf("%c\n",c);
 		if(c != 0){
 			clair = unsigned_append_char(clair,c);
 			free(sequence) ;
@@ -75,6 +68,7 @@ unsigned char* decode(unsigned char* code, unsigned char* clair, Arbre decodage,
 		}
 		code++;
 	}
+	printf("%s", clair);
 	return clair ;
 } 
 
@@ -101,7 +95,7 @@ char parcours_arbre(unsigned char* sequence, Arbre decodage, int i)
 
 }
 
-unsigned char* unsigned_append_char(unsigned char* out_c, char app){
+unsigned char* unsigned_append_char(unsigned char* out_c, unsigned char app){
 	int size = strlen((char *)out_c) + 2;
 	unsigned char* new_c = malloc(size); // Nouvelle allocation mémoire
 
@@ -126,28 +120,36 @@ char* append_char(char* out_c, char app){
 
 // TESTS
 int main(){
-	//char* code = "00010100000110100001110110010100101101001101100111";
+	unsigned char* code = (unsigned char *)"0010110000110110001001011000110101100100101100101"; //aaaabbbccde
+	int ind = 0;
 	
-	Arbre a = creer_arbre('a',0,NULL,NULL);
-	Arbre b = creer_arbre('b',0,NULL,NULL);
-	Arbre ab = creer_arbre('0',0,a,b);
-	Arbre c = creer_arbre('c',0,NULL,NULL);
-	Arbre abc = creer_arbre('0',0,ab,c);
-	
-	unsigned char* code= (unsigned char *)"01101100";
-	unsigned char* clair = (unsigned char *)"";
-	unsigned char* sequence = malloc(sizeof(unsigned char *)) ;
-	sequence[0] = '\0' ;
-
+	//Arbre a = creer_arbre('a',0,NULL,NULL);
+	//Arbre b = creer_arbre('b',0,NULL,NULL);
+	//Arbre ab = creer_arbre('0',0,a,b);
+	//Arbre c = creer_arbre('c',0,NULL,NULL);
+	//Arbre abc = creer_arbre('0',0,ab,c);
+	//
+	//unsigned char* code= (unsigned char *)"01101100"; // bcbca
+	//unsigned char* clair = malloc(sizeof(unsigned char *));
+	//clair[0] = '\0' ;
+	//unsigned char* sequence = malloc(sizeof(unsigned char *)) ;
+	//sequence[0] = '\0' ;
 	
 	//int i = 0 ;
 	//parcours_arbre("1",abc,i) ;
 
-	decode(code,clair,abc,sequence);
-	free(sequence) ;		
+	//decode(code,clair,abc,sequence);
+	//free(sequence) ;		
 	
-
-	//printf("%s",clair);
+	
+	Arbre a = lire_dico(code,&ind);
+	unsigned char * clair = malloc(sizeof(unsigned char *));
+	clair[0] = '\0' ;
+	unsigned char* zgueg= (unsigned char*)"000000000101011010110111";
+	unsigned char* sequence = malloc(sizeof(unsigned char *)) ;
+	sequence[0] = '\0'; 
+	
+	decode(zgueg,clair,a,sequence);
 	
 
 

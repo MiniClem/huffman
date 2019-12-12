@@ -12,7 +12,7 @@
  * Le pointeur sur la chaine de caractère aura avancé et indiqueras désormais 
  * le début de la séquence à décoder
 */
-Arbre lire_dico(char* code);
+Arbre lire_dico(unsigned char* code , int * ind);
 
 
 /* 
@@ -20,7 +20,7 @@ Arbre lire_dico(char* code);
  * Correspondant à la traduction des 8bits
 */
 
-Elt lire_ascii(unsigned char* octet, int compteur );
+Elt lire_ascii(unsigned char* octet);
 
 
 /* 
@@ -44,7 +44,7 @@ unsigned char * decode(unsigned char* code, unsigned char* clair, Arbre decodage
 char parcours_arbre(unsigned char* sequence, Arbre decodage, int i);
 
 char* append_char(char* out_c, char app);
-unsigned char* unsigned_append_char(unsigned char* out_c, char app);
+unsigned char* unsigned_append_char(unsigned char* out_c, unsigned char app);
 
 
 #endif

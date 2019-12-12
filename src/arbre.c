@@ -82,13 +82,13 @@ void print_racine(Arbre a)
 	}
 }
 
-void prof_prefixe(Arbre a, void action(Arbre))
+void prof_prefixe(Arbre a)
 {
 	if (!est_arbre_vide(a))
 	{
-		action(a);
-		prof_prefixe(fils_gauche(a), action);
-		prof_prefixe(fils_droit(a), action);
+		printf("%c",racine(a));
+		prof_prefixe(fils_gauche(a));
+		prof_prefixe(fils_droit(a));
 	}
 }
 

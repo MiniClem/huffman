@@ -26,7 +26,7 @@ Arbre fils_gauche(Arbre a);
 Arbre fils_droit(Arbre a);
 
 void print_racine(Arbre a);
-void prof_prefixe(Arbre a, void action(Arbre));
+void prof_prefixe(Arbre a);
 
 // void largeur(Arbre a, void action(Arbre));
 int hauteur(Arbre a);
