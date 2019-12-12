@@ -2,9 +2,11 @@
 #include <stdlib.h>
 #include "../include/file.h"
 
-FILE *ouvrir_fichier(char *filename)
+// mode écriture : "w"
+// mode lecture : "r"
+FILE *ouvrir_fichier(char *filename, char *mode)
 {
-	FILE *fichier = fopen(filename, "w");
+	FILE *fichier = fopen(filename, mode);
 	assert(fichier != NULL);
 	return fichier;
 }
@@ -15,32 +17,32 @@ void fermer_fichier(FILE *file)
 	file = NULL;
 }
 
-char *lire_caractere_fichier(char *file)
+unsigned char *lire_caractere_fichier(char *file)
 {
 
-	FILE *fichier = ouvrir_fichier(file);
+	FILE *fichier = ouvrir_fichier(file, "r");
 	int size;
-	char *caracterelu;
+	unsigned char *caracterelu;
 
 	// Calcule la taille d'un fichier
 	fseek(fichier, 0L, SEEK_END);
 	size = ftell(fichier);
 	rewind(fichier);
 
-	caracterelu = (char *)malloc((size + 1) * sizeof(char));
+	caracterelu = (unsigned char *)malloc((size + 1) * sizeof(unsigned char));
 
 	// Boucle de lecture des caractères un à un
 	for (int i = 0; i < size; i++)
 	{
-		caracterelu[i] = (char)fgetc(fichier); // On lit le caractère
-	}										   // On continue tant que fgetc n'a pas retourné EOF (fin de file)
+		caracterelu[i] = (unsigned char)fgetc(fichier); // On lit le caractère
+	}													// On continue tant que fgetc n'a pas retourné EOF (fin de file)
 	caracterelu[size] = '\0';
 
 	fermer_fichier(fichier);
 	return caracterelu;
 }
 
-byte *char_to_byte(char *char_to_convert)
+byte *char_to_byte(unsigned char *char_to_convert)
 {
 	byte *str = (byte *)calloc(1, sizeof(byte));
 	int a = 128; // 0b10000000
@@ -58,9 +60,9 @@ byte *char_to_byte(char *char_to_convert)
 	return str;
 }
 
-char *byte_to_char(byte byte_to_convert)
+unsigned char *byte_to_char(byte byte_to_convert)
 {
-	char *str = calloc(9, sizeof(char));
+	unsigned char *str = calloc(9, sizeof(unsigned char));
 	int a = 128;
 
 	for (int i = 0; i < 8; i++)
@@ -78,11 +80,12 @@ char *byte_to_char(byte byte_to_convert)
 	return str;
 }
 
-void ecrire_caractere_fichier(char *filename, char *message, int size)
+void ecrire_caractere_fichier(char *filename, unsigned char *message, int size)
 { //ecrit dans le fichier de nom filename , le message compréser
-	FILE *fichier = ouvrir_fichier(filename);
+	FILE *fichier = ouvrir_fichier(filename, "w");
 
-	fwrite(message, sizeof(char), size, fichier);
+	printf("Ecriture de %d octets dans %s\n", size, filename);
+	fwrite(message, sizeof(unsigned char), size, fichier);
 	//fputs(message,fichier);
 	fermer_fichier(fichier);
 }
@@ -92,6 +95,7 @@ void ecrire_bytes_fichier(char *filename, byte *message, int size)
 	ecrire_caractere_fichier(filename, message, size);
 }
 
+/*
 int main()
 {
 	// FICHIER
@@ -126,3 +130,4 @@ int main()
 	ecrire_caractere_fichier(file, c, strlen(c));
 	return 0;
 }
+*/

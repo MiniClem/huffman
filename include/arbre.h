@@ -32,5 +32,5 @@ int hauteur(Arbre a);
 
 int nb_feuille(Arbre a);
 Noeud *rechercher(Arbre a, Elt e);
-Noeud *rechercher_encodage(Arbre a, Elt e, char *c, int curs);
+Noeud *rechercher_encodage(Arbre a, Elt e, Elt *c, int curs);
 #endif

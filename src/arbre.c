@@ -158,7 +158,7 @@ Noeud *rechercher(Arbre a, Elt e)
 	return n;
 }
 
-Noeud *rechercher_encodage(Arbre a, Elt e, char *c, int curs)
+Noeud *rechercher_encodage(Arbre a, Elt e, Elt *c, int curs)
 {
 	Noeud *n;
 	if (est_arbre_vide(a))
