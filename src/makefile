@@ -18,6 +18,9 @@ LIBS=-lm
 _OBJ = main.o file.o encodage.o liste.o liste_ext.o arbre.o encodage.o interface.o menu_action.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
+_DEC_TEST_OBJ = decodage.o liste.o liste_ext.o arbre.o
+DEC_TEST_OBJ = $(patsubst %,$(ODIR)/%,$(_DEC_TEST_OBJ))
+
 _ENC_TEST_OBJ = encodage.o liste.o liste_ext.o arbre.o file.o interface.o
 ENC_TEST_OBJ = $(patsubst %,$(ODIR)/%,$(_ENC_TEST_OBJ))
 
@@ -29,6 +32,9 @@ $(ODIR)/%.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 # Le fichier éxécutable
+test_decodage: $(DEC_TEST_OBJ)
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+
 test_encodage: $(ENC_TEST_OBJ)
 	$(CC) -o $@ $^ $(CTESTFLAGS) $(CFLAGS) $(LIBS)
 
