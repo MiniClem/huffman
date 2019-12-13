@@ -65,7 +65,8 @@ unsigned char *byte_to_char(byte byte_to_convert)
 	unsigned char *str = calloc(9, sizeof(unsigned char));
 	int a = 128;
 
-	for (int i = 0; i < 8; i++)
+	int i;
+	for (i = 0; i < 8; i++)
 	{
 		if (((int)byte_to_convert & a) > 0)
 		{
@@ -77,6 +78,8 @@ unsigned char *byte_to_char(byte byte_to_convert)
 		}
 		a /= 2;
 	}
+
+	str[i] = '\0';
 	return str;
 }
 
