@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "../include/interface.h"
 #include "../include/menu_action.h"
+#include "../include/decodage.h" 
 
 static char path[256];
 static void menu()
@@ -37,7 +38,7 @@ int main(int argc, char **argv)
 			break;
 
 		case 3:
-			// uncompress(path);
+			decompressage(path);
 			break;
 
 		case 4:

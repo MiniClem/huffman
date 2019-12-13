@@ -1,6 +1,7 @@
 #include <string.h>
 #include "../include/decodage.h"
 #include <assert.h>
+#include "../include/encodage.h" 
 #include "../include/file.h"
 
 
@@ -122,7 +123,7 @@ char* append_char(char* out_c, char app){
 
 void decompressage( char* filename){
 	
-	unsigned char* fichier = byte_to_char((byte)lire_caractere_fichier(filename));
+	unsigned char* fichier = byte_to_char(lire_caractere_fichier(filename));
 	int ind = 0;
 	Arbre a = lire_dico(fichier,&ind);
 	
@@ -137,21 +138,19 @@ void decompressage( char* filename){
 	free(clair);
 	free(sequence);
 	
-	int size = strlen(filename);
-	filename[size-4] = 't';
-	filename[size-3] = 'x';
-	filename[size-2] = 't';
-	filename[size-1] = '\0';
+	strcat(filename, ".txt") ;
 	
+	printf("filename : %s \n", decompresse) ;
 	
-	ecrire_caractere_fichier(filename, decompresse, strlen((char*)decompresse));
+	ecrire_caractere_fichier(filename, decompresse, strlen(decompresse)) ;
+	
+
 }
 
 // TESTS
 int main(){
-	/*
-	unsigned char* code = (unsigned char *)"0010110000110110001001011000110101100100101100101"; //aaaabbbccde
-	int ind = 0;
+	//unsigned char* code = (unsigned char *)"0010110000110110001001011000110101100100101100101"; //aaaabbbccde
+	//int ind = 0;
 
 
 	
@@ -173,7 +172,7 @@ int main(){
 	//decode(code,clair,abc,sequence);
 	//free(sequence) ;		
 	
-	
+	/*	
 	Arbre a = lire_dico(code,&ind);
 	unsigned char * clair = malloc(sizeof(unsigned char *));
 	clair[0] = '\0' ;
@@ -195,8 +194,7 @@ int main(){
 	printf("code = %s ",code2) ;
 	
 	printf("%s\n", code);
-	free(code); */	
-	
-	
+	free(code); */
+
 	return  0;
 }
