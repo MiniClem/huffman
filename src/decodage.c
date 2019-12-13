@@ -40,26 +40,35 @@
 
 void lire_dico(unsigned char *code, int *ind, Arbre a)
 {
+	printf("ld\n");
 	char b = code[(*ind)++];
 
 	if (b == '1')
 	{
+		printf("1\n");
 		a->fils_gauche = NULL; // Pas nécessaire car déjà init à NULL
 		a->fils_droit = NULL;  // Pas nécessaire car déjà init à NULL
 		a->elt = lire_ascii(code + *ind);
 		*ind += 8;
 	}
-	else
+	else if (b == '0')
 	{
+		printf("0\n");
 		// Fils gauche
 		Arbre fg = creer_arbre('\0', 0, NULL, NULL);
+		printf("fg\n");
 		a->fils_gauche = fg;
 		lire_dico(code, ind, fg);
 
 		// Fils droit
 		Arbre fd = creer_arbre('\0', 0, NULL, NULL);
+		printf("fd\n");
 		a->fils_droit = fd;
 		lire_dico(code, ind, fd);
+	}
+	else
+	{
+		return;
 	}
 }
 
@@ -164,17 +173,16 @@ int decompressage(char *filename)
 	printf("Taille des caracteres : %ld\n", strlen((char *)fichier));
 	printf("Lu : %s\n", fichier);
 	printf("Creation du dico de caracteres..\n");
-	Arbre a = malloc(sizeof(Noeud));
-	lire_dico(fichier, &ind, a);
+	Arbre dico = creer_arbre('\0', 0, NULL, NULL);
+	lire_dico(fichier, &ind, dico);
 
 	unsigned char *clair = malloc(sizeof(unsigned char *));
 	clair[0] = '\0';
-
 	unsigned char *sequence = malloc(sizeof(unsigned char *));
 	sequence[0] = '\0';
 
 	printf("Decompression des caracteres..\n");
-	unsigned char *decompresse = decode(fichier, clair, a, sequence);
+	unsigned char *decompresse = decode((fichier + ind), clair, dico, sequence);
 
 	filename[strlen(filename) - 4] = '\0';
 
@@ -184,9 +192,9 @@ int decompressage(char *filename)
 	ecrire_caractere_fichier(filename, decompresse, strlen((char *)decompresse));
 	printf("Desallocation memoire.. \n");
 
-	detruire_arbre(a);
-	free(clair);
-	free(sequence);
+	detruire_arbre(dico);
+	// free(clair);
+	// free(sequence);
 	return 0;
 }
 
@@ -200,66 +208,71 @@ unsigned char *decompress_encodage(byte *enc)
 	// Alloue l'espace mémoire nécessaire pour créer 8 char pour un byte
 	unsigned char *decode = calloc(size_decompress, sizeof(unsigned char));
 	int i;
-	for (i = 0; i < size_decompress - 1; i++)
+	for (i = 0; i < length; i++)
 	{
 		unsigned char *c = byte_to_char((byte)enc[i]);
 
 		// Copie de la mémoire
-		strcat((char *)decode, (char *)c);
+		// strcat((char *)decode, (char *)c);
+		for (int k = 0; k < 8; k++)
+		{
+			decode[i * 8 + k] = c[k];
+		}
 
 		// Désalloue la mémoire
 		free(c);
 		c = NULL;
 	}
+	printf("size_decompress : %d, i = %d\n", size_decompress, i);
 
 	// Ajout du caractère de fin
-	decode[i] = '\0';
+	decode[i * 8] = '\0';
 
 	return decode;
 }
 // DECOMPRESS
 
 // TESTS
-int main()
-{
-	// Dico : 	01011000010101100011101100010
-	// T : 		01011000010101100011101100010000111110
-	// M : 		000111110 -> aaabbc
-	// unsigned char *code = (unsigned char *)"0010110000110110001001011000110101100100101100101"; //aaaabbbccde
-	// int ind = 0;
+// int main()
+// {
+// 	// Dico : 	01011000010101100011101100010
+// 	// T : 		01011000010101100011101100010000111110
+// 	// M : 		000111110 -> aaabbc
+// 	// unsigned char *code = (unsigned char *)"0010110000110110001001011000110101100100101100101"; //aaaabbbccde
+// 	// int ind = 0;
 
-	// Arbre a = creer_arbre('a', 0, NULL, NULL);
-	// Arbre b = creer_arbre('b', 0, NULL, NULL);
-	// Arbre ab = creer_arbre('0', 0, a, b);
-	// Arbre c = creer_arbre('c', 0, NULL, NULL);
-	// Arbre abc = creer_arbre('0', 0, ab, c);
-	Arbre dico = malloc(sizeof(Noeud));
-	int ind = 0;
-	unsigned char *code = (unsigned char *)"01011000010101100011101100010000111110"; // aaabbc
-	lire_dico(code, &ind, dico);
+// 	// Arbre a = creer_arbre('a', 0, NULL, NULL);
+// 	// Arbre b = creer_arbre('b', 0, NULL, NULL);
+// 	// Arbre ab = creer_arbre('0', 0, a, b);
+// 	// Arbre c = creer_arbre('c', 0, NULL, NULL);
+// 	// Arbre abc = creer_arbre('0', 0, ab, c);
+// 	Arbre dico = malloc(sizeof(Noeud));
+// 	int ind = 0;
+// 	unsigned char *code = (unsigned char *)"01011000010101100011101100010000111110"; // aaabbc
+// 	lire_dico(code, &ind, dico);
 
-	unsigned char *chiffre = (unsigned char *)"000111110"; // aaabbc
-	unsigned char *clair = malloc(sizeof(unsigned char *));
-	clair[0] = '\0';
-	unsigned char *sequence = malloc(sizeof(unsigned char *));
-	sequence[0] = '\0';
+// 	unsigned char *chiffre = (unsigned char *)"000111110"; // aaabbc
+// 	unsigned char *clair = malloc(sizeof(unsigned char *));
+// 	clair[0] = '\0';
+// 	unsigned char *sequence = malloc(sizeof(unsigned char *));
+// 	sequence[0] = '\0';
 
-	// parcours_arbre(chiffre, dico, 0);
+// 	// parcours_arbre(chiffre, dico, 0);
 
-	clair = decode(chiffre, clair, dico, sequence);
-	printf("%s\n", clair);
+// 	clair = decode(chiffre, clair, dico, sequence);
+// 	printf("%s\n", clair);
 
-	if (sequence)
-	{
-		free(sequence);
-	}
+// 	if (sequence)
+// 	{
+// 		free(sequence);
+// 	}
 
-	if (clair)
-	{
-		free(clair);
-	}
+// 	if (clair)
+// 	{
+// 		free(clair);
+// 	}
 
-	/*	
+/*	
 	Arbre a = lire_dico(code,&ind);
 	unsigned char * clair = malloc(sizeof(unsigned char *));
 	clair[0] = '\0' ;
@@ -283,5 +296,5 @@ int main()
 	printf("%s\n", code);
 	free(code); */
 
-	return 0;
-}
+// 	return 0;
+// }
