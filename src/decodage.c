@@ -121,8 +121,8 @@ char* append_char(char* out_c, char app){
 
 
 
-void decompressage( char* filename){
-	
+int decompressage( char* filename){
+	printf("je suis au début") ;
 	unsigned char* fichier = byte_to_char(lire_caractere_fichier(filename));
 	int ind = 0;
 	Arbre a = lire_dico(fichier,&ind);
@@ -132,6 +132,8 @@ void decompressage( char* filename){
 	
 	unsigned char* sequence = malloc(sizeof(unsigned char *)) ;
 	sequence[0] = '\0'; 
+
+	printf("je suis au milieu :)") ;
 	
 	unsigned char* decompresse = decode(fichier,clair,a,sequence);
 	
@@ -143,6 +145,8 @@ void decompressage( char* filename){
 	printf("filename : %s \n", decompresse) ;
 	
 	ecrire_caractere_fichier(filename, decompresse, strlen(decompresse)) ;
+	printf("je susi bien arrivé à la fin") ;
+	return 0 ;
 	
 
 }

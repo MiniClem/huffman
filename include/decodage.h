@@ -46,7 +46,7 @@ char parcours_arbre(unsigned char* sequence, Arbre decodage, int i);
 char* append_char(char* out_c, char app);
 unsigned char* unsigned_append_char(unsigned char* out_c, unsigned char app);
 
-void decompressage(char* filename);
+int decompressage(char* filename);
 
 
 #endif
