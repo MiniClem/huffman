@@ -20,25 +20,33 @@ void fermer_fichier(FILE *file)
 unsigned char *lire_caractere_fichier(char *file)
 {
 
-	FILE *fichier = ouvrir_fichier(file, "r");
 	int size;
 	unsigned char *caracterelu;
+	FILE *fichier = ouvrir_fichier(file, "r");
 
-	// Calcule la taille d'un fichier
-	fseek(fichier, 0L, SEEK_END);
-	size = ftell(fichier);
-	rewind(fichier);
-
-	caracterelu = (unsigned char *)malloc((size + 1) * sizeof(unsigned char));
-
-	// Boucle de lecture des caractères un à un
-	for (int i = 0; i < size; i++)
+	if (fichier)
 	{
-		caracterelu[i] = (unsigned char)fgetc(fichier); // On lit le caractère
-	}													// On continue tant que fgetc n'a pas retourné EOF (fin de file)
-	caracterelu[size] = '\0';
+		// Calcule la taille d'un fichier
+		fseek(fichier, 0L, SEEK_END);
+		size = ftell(fichier);
+		rewind(fichier);
 
-	fermer_fichier(fichier);
+		caracterelu = (unsigned char *)malloc((size + 1) * sizeof(unsigned char));
+
+		// Boucle de lecture des caractères un à un
+		for (int i = 0; i < size; i++)
+		{
+			caracterelu[i] = (unsigned char)fgetc(fichier); // On lit le caractère
+		}													// On continue tant que fgetc n'a pas retourné EOF (fin de file)
+		caracterelu[size] = '\0';
+
+		fermer_fichier(fichier);
+	}
+	else
+	{
+		printf("ERREUR DE LECTURE DU FICHIER\n");
+	}
+
 	return caracterelu;
 }
 

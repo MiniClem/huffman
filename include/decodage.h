@@ -14,7 +14,7 @@
  * Le pointeur sur la chaine de caractère aura avancé et indiqueras désormais 
  * le début de la séquence à décoder
 */
-Arbre lire_dico(unsigned char *code, int *ind);
+void lire_dico(unsigned char *code, int *ind, Arbre a);
 
 /* 
  * Renvoie le code ascii dans un int corespondant à une chaine de caractères de 8 octets 
