@@ -1,7 +1,7 @@
 #include <string.h>
 #include "../include/decodage.h"
 #include <assert.h>
-
+#include "../include/file.h"
 
 
 Arbre lire_dico(unsigned char* code , int * ind){
@@ -122,7 +122,7 @@ char* append_char(char* out_c, char app){
 
 void decompressage( char* filename){
 	
-	unsigned char* fichier = byte_to_char(lire_caractere_fichier(filename));
+	unsigned char* fichier = byte_to_char((byte)lire_caractere_fichier(filename));
 	int ind = 0;
 	Arbre a = lire_dico(fichier,&ind);
 	
@@ -144,13 +144,12 @@ void decompressage( char* filename){
 	filename[size-1] = '\0';
 	
 	
-	ecrire_caractere_fichier(filename, decompresse, strlen(decompresse) ;)
-	
-
+	ecrire_caractere_fichier(filename, decompresse, strlen((char*)decompresse));
 }
 
 // TESTS
 int main(){
+	/*
 	unsigned char* code = (unsigned char *)"0010110000110110001001011000110101100100101100101"; //aaaabbbccde
 	int ind = 0;
 
@@ -186,7 +185,7 @@ int main(){
 	
 
 
-	/*unsigned char* code2 = malloc(3 * sizeof(unsigned char)) ;
+	unsigned char* code2 = malloc(3 * sizeof(unsigned char)) ;
 	code2[0] = '1';
 	code2[1] = '0';
 	code2[2] = '\0'; 
@@ -196,7 +195,8 @@ int main(){
 	printf("code = %s ",code2) ;
 	
 	printf("%s\n", code);
-	free(code); */
-
+	free(code); */	
+	
+	
 	return  0;
 }
