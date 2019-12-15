@@ -108,6 +108,11 @@ unsigned char *decode(unsigned char *code, unsigned char *clair, Arbre decodage,
 		char c = parcours_arbre(sequence, decodage, 0);
 		if (c != 0)
 		{
+			if (c == (unsigned char)7) // Signal de fin
+			{
+				return clair;
+			}
+
 			printf("sequence : %s, carac found : %c\n", sequence, c);
 			clair = unsigned_append_char(clair, c);
 			free(sequence);
