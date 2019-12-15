@@ -14,6 +14,11 @@ int compress_selected(char *path_to_file)
 	return compress(path_to_file);
 }
 
+int decompress_selected(char *path_to_file)
+{
+	return decompressage(path_to_file) ;
+}
+
 void help()
 {
 	printf("\n");

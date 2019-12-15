@@ -3,8 +3,11 @@
 #include "./arbre.h"
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include <math.h>
-
+#include <assert.h>
+#include "./encodage.h"
+#include "./file.h"
 
 /* 
  * Prend en argument la chaine de caractère comportant que des '0' et '1';
@@ -12,16 +15,14 @@
  * Le pointeur sur la chaine de caractère aura avancé et indiqueras désormais 
  * le début de la séquence à décoder
 */
-Arbre lire_dico(unsigned char* code , int * ind);
-
+void lire_dico(unsigned char *code, int *ind, Arbre a);
 
 /* 
  * Renvoie le code ascii dans un int corespondant à une chaine de caractères de 8 octets 
  * Correspondant à la traduction des 8bits
 */
 
-Elt lire_ascii(unsigned char* octet);
-
+Elt lire_ascii(unsigned char *octet);
 
 /* 
  * Renvoie le texte clair à partir du texte compressé et de l'arbre de décodage des caratères
@@ -33,7 +34,7 @@ Elt lire_ascii(unsigned char* octet);
  * on met le caractère dans clair. Si on n'arrive pas à une feuille,
  * on relance la boucle
  */
-unsigned char * decode(unsigned char* code, unsigned char* clair, Arbre decodage, unsigned char* sequence);
+unsigned char *decode(unsigned char *code, unsigned char *clair, Arbre decodage, unsigned char *sequence);
 
 /*
  * Parcourt l'arbre pendant le décodage de la chaine de caractères 
@@ -41,10 +42,13 @@ unsigned char * decode(unsigned char* code, unsigned char* clair, Arbre decodage
 	si on rencontre un 1, appel récursif sur le fils droit
 	si c'est une feuille, on affiche le caractère
  */
-char parcours_arbre(unsigned char* sequence, Arbre decodage, int i);
+char parcours_arbre(unsigned char *sequence, Arbre decodage, int i);
 
-char* append_char(char* out_c, char app);
-unsigned char* unsigned_append_char(unsigned char* out_c, unsigned char app);
+char *append_char(char *out_c, char app);
+unsigned char *unsigned_append_char(unsigned char *out_c, unsigned char app);
 
+int decompressage(char *filename);
+
+unsigned char *decompress_encodage(byte *enc);
 
 #endif

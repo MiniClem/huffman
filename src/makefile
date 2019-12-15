@@ -15,10 +15,10 @@ DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 LIBS=-lm	
 
 # Les fichiers objets
-_OBJ = main.o file.o encodage.o liste.o liste_ext.o arbre.o encodage.o interface.o menu_action.o
+_OBJ = main.o file.o encodage.o liste.o liste_ext.o arbre.o decodage.o interface.o menu_action.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
-_DEC_TEST_OBJ = decodage.o liste.o liste_ext.o arbre.o
+_DEC_TEST_OBJ = decodage.o liste.o liste_ext.o arbre.o file.o
 DEC_TEST_OBJ = $(patsubst %,$(ODIR)/%,$(_DEC_TEST_OBJ))
 
 _ENC_TEST_OBJ = encodage.o liste.o liste_ext.o arbre.o file.o interface.o

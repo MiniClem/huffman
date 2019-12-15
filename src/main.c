@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 			break;
 
 		case 3:
-			// uncompress(path);
+			decompress_selected(path);
 			break;
 
 		case 4:
