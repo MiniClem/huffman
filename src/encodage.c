@@ -157,7 +157,6 @@ int trouver_combiner(Arbre *l, int size)
 		// Indique la fin du traitement de la liste
 		return 0;
 	}
-	printf("sljkdf\n");
 
 	// Combiner les 2 arbres
 	Arbre new_a = creer_arbre(a->elt, a->poid, a->fils_gauche, a->fils_droit);
@@ -272,11 +271,12 @@ void append_encodage(unsigned char *chaine, p_encodage enc)
 	int length = strlen((char *)chaine);
 
 	// Créer un nouvel espace mémoire qui peut contenir toutes les chaines
-	unsigned char *s_new_encodage = (unsigned char *)calloc(length_enc + length + 2, sizeof(unsigned char));
+	unsigned char *s_new_encodage = (unsigned char *)calloc(length_enc + length + 1, sizeof(unsigned char));
 
 	// Copie les contenus
 	memcpy(s_new_encodage, s_encodage(enc), sizeof(unsigned char) * length_enc);
 	memcpy(s_new_encodage + length_enc, chaine, sizeof(unsigned char) * length);
+	s_new_encodage[length_enc + length] = '\0';
 
 	// Désalloue l'ancien pointeur
 	free(s_encodage(enc));
@@ -354,7 +354,7 @@ void create_code_texte(p_encodage enc, unsigned char *m)
 {
 	Arbre dico = enc->dico;
 	int length = strlen((char *)m);
-	unsigned char code[32] = {0};
+	unsigned char code[16] = {0};
 
 	for (int i = 0; i < length; i++)
 	{
