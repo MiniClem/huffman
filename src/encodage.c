@@ -5,21 +5,32 @@
 int compress(char *path_to_file)
 {
 	char compressed_filename[256] = {0};
+	char bell_key[] = {(char)7, '\0'};
+	unsigned char *m = NULL;
+	unsigned char *file_read = NULL;
+	p_encodage p_enc = NULL;
 
 	// Ouvre et copie le contenu du fichier dans m
 	printf("Lecture du contenu du fichier..\n");
-	unsigned char *m = lire_caractere_fichier(path_to_file);
-	printf("%s\n", m);
+	file_read = lire_caractere_fichier(path_to_file);
+	printf("%s\n", file_read);
 
-	p_encodage p_enc = create_encodage();
+	// Ajout du caractère de terminaison
+	m = calloc(strlen((char *)file_read) + 1 + 1, sizeof(unsigned char)); // taille de la lecture + char d'arret + char NUL
+	strcat((char *)m, (char *)file_read);
+	strcat((char *)m, bell_key); // Char d'arrêt de compression "bell key"
+
+	p_enc = create_encodage();
 
 	// Calcule les fréquences dans le message et les places dans la structure sous forme d'un arbre
 	// unique qui sera par la suite notre dictionnaire pour encode/decoder
-	printf("Calcul de l'arbre par Huffman..\n");
+	printf("Calcul des frequences..\n");
 	frequences(m, p_enc);
+	printf("Calcul de l'arbre par Huffman..\n");
 	huffman(p_enc);
 
 	// Encodage dico
+	printf("Création de l'encodage par le dictionnaire..\n");
 	create_code_arbre(p_enc->dico, p_enc);
 	printf("Dico\n");
 	print_encodage(p_enc); // Affichage test
@@ -84,7 +95,7 @@ Arbre *creer_liste_arbre(p_encodage enc, int *size)
 	Arbre *t_noeud;
 	Arbre n;
 	int *tab_frequence = enc->tab_frequences;
-	Arbre temp_noeuds[NB_ASCII] = {0};
+	Arbre temp_noeuds[NB_ASCII] = {NULL};
 
 	// On calcule le nombre de valeurs non nulle
 	for (int i = 0; i < NB_ASCII; i++)
@@ -96,10 +107,15 @@ Arbre *creer_liste_arbre(p_encodage enc, int *size)
 		}
 	}
 
+	printf("size %d\n", *size);
 	// Allocation de la mémoire pour le tableau de noeud
-	t_noeud = malloc(sizeof(Arbre) * (size[0] - 1));
+	t_noeud = malloc(sizeof(Arbre) * (*size));
 	// Copie de la mémoire de temp jusqu'au final
-	memcpy(t_noeud, temp_noeuds, sizeof(Arbre) * *size);
+	for (int i = 0; i < *size; i++)
+	{
+		t_noeud[i] = malloc(sizeof(Noeud));
+		memcpy(t_noeud[i], temp_noeuds[i], sizeof(Noeud));
+	}
 
 	return t_noeud;
 }
@@ -141,6 +157,7 @@ int trouver_combiner(Arbre *l, int size)
 		// Indique la fin du traitement de la liste
 		return 0;
 	}
+	printf("sljkdf\n");
 
 	// Combiner les 2 arbres
 	Arbre new_a = creer_arbre(a->elt, a->poid, a->fils_gauche, a->fils_droit);
@@ -163,18 +180,23 @@ void huffman(p_encodage enc)
 
 Arbre huffman_merge(Arbre *l, int size)
 {
-	int is_working = 1;
-
-	do
+	while (trouver_combiner(l, size))
 	{
-		is_working = trouver_combiner(l, size);
-	} while (is_working);
+	}
 
 	for (int i = 0; i < size; i++)
 	{
 		if (l[i] != NULL)
 		{
-			return l[i];
+			Arbre a = malloc(sizeof(Noeud));
+			memcpy(a, l[i], sizeof(Noeud));
+			// for (int k = 0; k < size; k++)
+			// {
+			// detruire_arbre(l[i]);
+			// free(l);
+			// }
+
+			return a;
 		}
 	}
 

@@ -7,7 +7,7 @@
 #include "../include/file.h"
 
 #define ASCII_SIZE 9
-#define NB_ASCII 512
+#define NB_ASCII 256
 
 typedef struct encodage
 {
