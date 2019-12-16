@@ -1,5 +1,10 @@
 #include "../include/arbre.h"
 
+Arbre creer_arbre_vide (void)
+{
+  return NULL ;
+}
+
 Arbre creer_arbre(Elt x, int poid, Arbre fg, Arbre fd)
 {
 	Noeud *nouveau;
@@ -51,19 +56,20 @@ Arbre detruire_arbre(Arbre a)
 {
 	if (!est_arbre_vide(a))
 	{
-		printf("Destruction arbre..\n");
+		// printf("Destruction arbre..\n");
 
-		if (!est_arbre_vide(fils_gauche(a)))
+		if (a->fils_gauche != NULL)
 		{
 			detruire_arbre(fils_gauche(a));
 		}
 
-		if (!est_arbre_vide(fils_droit(a)))
+		if (a->fils_droit != NULL)
 		{
 			detruire_arbre(fils_droit(a));
 		}
 
 		free(a);
+		a = NULL;
 	}
 
 	return NULL;
@@ -77,13 +83,13 @@ void print_racine(Arbre a)
 	}
 }
 
-void prof_prefixe(Arbre a, void action(Arbre))
+void prof_prefixe(Arbre a)
 {
 	if (!est_arbre_vide(a))
 	{
-		action(a);
-		prof_prefixe(fils_gauche(a), action);
-		prof_prefixe(fils_droit(a), action);
+		printf("%c",racine(a));
+		prof_prefixe(fils_gauche(a));
+		prof_prefixe(fils_droit(a));
 	}
 }
 
@@ -152,6 +158,32 @@ Noeud *rechercher(Arbre a, Elt e)
 	if (!n)
 	{
 		n = rechercher(fils_droit(a), e);
+	}
+
+	return n;
+}
+
+Noeud *rechercher_encodage(Arbre a, Elt e, Elt *c, int curs)
+{
+	Noeud *n;
+	if (est_arbre_vide(a))
+	{
+		c[curs] = '\0';
+		return NULL;
+	}
+
+	if (racine(a) == e)
+	{
+		c[curs] = '\0';
+		return a;
+	}
+
+	c[curs] = '0';
+	n = rechercher_encodage(fils_gauche(a), e, c, curs + 1);
+	if (!n)
+	{
+		c[curs] = '1';
+		n = rechercher_encodage(fils_droit(a), e, c, curs + 1);
 	}
 
 	return n;

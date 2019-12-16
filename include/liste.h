@@ -4,7 +4,7 @@
 #include <assert.h>
 
 // Poiteur sur quelque chose
-typedef char Elt;
+typedef unsigned char Elt;
 
 struct Maillon
 {

@@ -13,6 +13,7 @@ typedef struct noeud
 
 typedef struct noeud *Arbre;
 
+Arbre creer_arbre_vide (void) ;
 Arbre creer_arbre(Elt x, int poid, Arbre fg, Arbre fd);
 Arbre detruire_arbre(Arbre a);
 
@@ -25,11 +26,12 @@ Arbre fils_gauche(Arbre a);
 Arbre fils_droit(Arbre a);
 
 void print_racine(Arbre a);
-void prof_prefixe(Arbre a, void action(Arbre));
+void prof_prefixe(Arbre a);
 
 // void largeur(Arbre a, void action(Arbre));
 int hauteur(Arbre a);
 
 int nb_feuille(Arbre a);
 Noeud *rechercher(Arbre a, Elt e);
+Noeud *rechercher_encodage(Arbre a, Elt e, Elt *c, int curs);
 #endif
