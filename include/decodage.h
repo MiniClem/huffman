@@ -49,6 +49,6 @@ unsigned char *unsigned_append_char(unsigned char *out_c, unsigned char app);
 
 int decompressage(char *filename);
 
-unsigned char *decompress_encodage(byte *enc);
+unsigned char *decompress_encodage(byte *enc, int size_file);
 
 #endif

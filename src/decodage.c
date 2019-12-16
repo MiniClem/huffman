@@ -173,9 +173,11 @@ char *append_char(char *out_c, char app)
 int decompressage(char *filename)
 {
 	int ind = 0;
+	int size_file = 0;
 	printf("Lecture fichier..\n");
-	unsigned char *fichier = decompress_encodage((byte *)lire_caractere_fichier(filename));
-	printf("Taille des caracteres : %ld\n", strlen((char *)fichier));
+	byte *t_b = lire_byte_fichier(filename, &size_file);
+	unsigned char *fichier = decompress_encodage(t_b, size_file);
+	printf("Taille des caracteres : %d\n", size_file);
 	printf("Lu : %s\n", fichier);
 	printf("Creation du dico de caracteres..\n");
 	Arbre dico = creer_arbre('\0', 0, NULL, NULL);
@@ -204,16 +206,16 @@ int decompressage(char *filename)
 }
 
 // DECOMPRESS
-unsigned char *decompress_encodage(byte *enc)
+unsigned char *decompress_encodage(byte *enc, int size)
 {
+	printf("TAILELELEL : %d\n", size);
 	// Taille encodage en char représentant des bytes donc 8 char pour un byte
-	int length = strlen((char *)enc);
-	int size_decompress = 8 * length + 1; // +1 pour char de fin de chaine
+	int size_decompress = 8 * size + 1; // +1 pour char de fin de chaine
 
 	// Alloue l'espace mémoire nécessaire pour créer 8 char pour un byte
 	unsigned char *decode = calloc(size_decompress, sizeof(unsigned char));
 	int i;
-	for (i = 0; i < length; i++)
+	for (i = 0; i < size; i++)
 	{
 		unsigned char *c = byte_to_char((byte)enc[i]);
 

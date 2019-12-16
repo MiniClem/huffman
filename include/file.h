@@ -10,6 +10,7 @@ FILE *ouvrir_fichier(char *filename, char *mode);
 void fermer_fichier(FILE *file);
 
 unsigned char *lire_caractere_fichier(char *file);
+byte *lire_byte_fichier(char *file, int *size);
 
 void ecrire_caractere_fichier(char *filename, unsigned char *message, int size);
 void ecrire_bytes_fichier(char *filename, byte *message, int size);
