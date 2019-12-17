@@ -1,51 +1,11 @@
 #include "../include/decodage.h"
 
-// Arbre lire_dico(unsigned char *code, int *ind)
-// {
-// 	Arbre fg, fd;
-// 	char c = code[*ind];
-// 	if (c != '\0')
-// 	{
-// 		printf("Pour %d on a %c\n", *ind, c);
-// 	}
-// 	else
-// 	{
-// 		printf("Pour %d on a \\0 \n", *ind);
-// 	}
-
-// 	if (c == '0')
-// 	{
-// 		printf("(c == '0')\n");
-// 		(*ind) += 1;
-// 		fg = lire_dico(code, ind);
-// 		(*ind) += 1;
-// 		fd = lire_dico(code, ind);
-// 		return creer_arbre('\0', 0, fg, fd);
-// 	}
-// 	else if (c == '1')
-// 	{
-// 		printf("(c == '1')\n");
-
-// 		Arbre a = NULL;
-// 		(*ind) += 1;
-// 		a = creer_arbre(lire_ascii((unsigned char *)code + (*ind)), 0, NULL, NULL);
-// 		(*ind) += 7;
-// 		return a;
-// 	}
-// 	else
-// 	{
-// 		return NULL;
-// 	}
-// }
-
 void lire_dico(unsigned char *code, int *ind, Arbre a)
 {
-	printf("ld\n");
 	char b = code[(*ind)++];
 
 	if (b == '1')
 	{
-		printf("1\n");
 		a->fils_gauche = NULL; // Pas nécessaire car déjà init à NULL
 		a->fils_droit = NULL;  // Pas nécessaire car déjà init à NULL
 		a->elt = lire_ascii(code + *ind);
@@ -53,16 +13,13 @@ void lire_dico(unsigned char *code, int *ind, Arbre a)
 	}
 	else if (b == '0')
 	{
-		printf("0\n");
 		// Fils gauche
 		Arbre fg = creer_arbre('\0', 0, NULL, NULL);
-		printf("fg\n");
 		a->fils_gauche = fg;
 		lire_dico(code, ind, fg);
 
 		// Fils droit
 		Arbre fd = creer_arbre('\0', 0, NULL, NULL);
-		printf("fd\n");
 		a->fils_droit = fd;
 		lire_dico(code, ind, fd);
 	}
@@ -85,7 +42,7 @@ Elt lire_ascii(unsigned char *octet)
 		}
 	}
 	Elt ascii = (Elt)valeur;
-	printf("%c \n", valeur);
+	// printf("%c \n", valeur); // Affiche la valeur de l'ascii lu
 	return ascii;
 }
 
@@ -113,7 +70,7 @@ unsigned char *decode(unsigned char *code, unsigned char *clair, Arbre decodage,
 				return clair;
 			}
 
-			printf("sequence : %s, carac found : %c\n", sequence, c);
+			// printf("sequence : %s, carac found : %c\n", sequence, c);
 			clair = unsigned_append_char(clair, c);
 			free(sequence);
 			sequence = malloc(sizeof(unsigned char *));
@@ -170,15 +127,14 @@ char *append_char(char *out_c, char app)
 	return new_c;
 }
 
-int decompressage(char *filename)
+int decompression(char *filename)
 {
 	int ind = 0;
 	int size_file = 0;
 	printf("Lecture fichier..\n");
 	byte *t_b = lire_byte_fichier(filename, &size_file);
 	unsigned char *fichier = decompress_encodage(t_b, size_file);
-	printf("Taille des caracteres : %d\n", size_file);
-	printf("Lu : %s\n", fichier);
+	// printf("Lu : %s\n", fichier);
 	printf("Creation du dico de caracteres..\n");
 	Arbre dico = creer_arbre('\0', 0, NULL, NULL);
 	lire_dico(fichier, &ind, dico);
@@ -193,7 +149,7 @@ int decompressage(char *filename)
 
 	filename[strlen(filename) - 4] = '\0';
 
-	printf("filename : %s \n", decompresse);
+	printf("filename : %s \n", filename);
 
 	printf("Ecriture dans le fichier..\n");
 	ecrire_caractere_fichier(filename, decompresse, strlen((char *)decompresse));
@@ -208,7 +164,6 @@ int decompressage(char *filename)
 // DECOMPRESS
 unsigned char *decompress_encodage(byte *enc, int size)
 {
-	printf("TAILELELEL : %d\n", size);
 	// Taille encodage en char représentant des bytes donc 8 char pour un byte
 	int size_decompress = 8 * size + 1; // +1 pour char de fin de chaine
 
@@ -230,7 +185,7 @@ unsigned char *decompress_encodage(byte *enc, int size)
 		free(c);
 		c = NULL;
 	}
-	printf("size_decompress : %d, i = %d\n", size_decompress, i);
+	// printf("size_decompress : %d, i = %d\n", size_decompress, i);
 
 	// Ajout du caractère de fin
 	decode[i * 8] = '\0';

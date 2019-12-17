@@ -47,7 +47,7 @@ char parcours_arbre(unsigned char *sequence, Arbre decodage, int i);
 char *append_char(char *out_c, char app);
 unsigned char *unsigned_append_char(unsigned char *out_c, unsigned char app);
 
-int decompressage(char *filename);
+int decompression(char *filename);
 
 unsigned char *decompress_encodage(byte *enc, int size_file);
 

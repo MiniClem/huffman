@@ -20,7 +20,28 @@ int main(int argc, char **argv)
 {
 	int err = 0;
 	int choix;
-	strcpy(path, argv[0]);
+
+	if (argc == 3)
+	{
+		// Facilite l'insertion du nom
+		strcpy(path, argv[2]);
+
+		// Lance une commande directement
+		if (strcmp(argv[1], "-c") == 0)
+		{
+			compress_selected(path);
+		}
+		else if (strcmp(argv[1], "-d") == 0)
+		{
+			decompress_selected(path);
+		}
+		else
+		{
+			help();
+		}
+
+		return 0;
+	}
 
 	menu();
 	choix = lire_entier();

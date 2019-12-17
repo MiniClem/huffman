@@ -50,6 +50,7 @@ int compress(char *path_to_file)
 	ecrire_bytes_fichier(compressed_filename, p_enc->b_enc, p_enc->b_length - 1); // On écrit tout sauf le bit de fin de chaine de caractère
 
 	// Libération mémoire
+	printf("Désallocation de la mémoire..\n");
 	destruct_encodage(p_enc);
 	free(m);
 	printf("Compression terminee..\n");
