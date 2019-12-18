@@ -13,7 +13,7 @@ int compress(char *path_to_file)
 	// Ouvre et copie le contenu du fichier dans m
 	printf("Lecture du contenu du fichier..\n");
 	file_read = lire_caractere_fichier(path_to_file);
-	printf("%s\n", file_read);
+	// printf("%s\n", file_read);
 
 	// Ajout du caractère de terminaison
 	m = calloc(strlen((char *)file_read) + 1 + 1, sizeof(unsigned char)); // taille de la lecture + char d'arret + char NUL
@@ -79,13 +79,13 @@ void compress_encodage(p_encodage p_enc)
 		byte *c = char_to_byte(p_enc->s_enc + i * 8);
 
 		// Copie de la mémoire
-		memcpy(p_enc->b_enc + i, c, sizeof(byte));
+		p_enc->b_enc[i] = *c;
 		free(c);
 		c = NULL;
 	}
 
 	// Ajout du caractère de fin
-	p_enc->b_enc[i] = '\0';
+	p_enc->b_enc[i - 1] = '\0';
 }
 // COMPRESS
 

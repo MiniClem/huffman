@@ -85,10 +85,11 @@ byte *char_to_byte(unsigned char *char_to_convert)
 {
 	byte *str = (byte *)calloc(1, sizeof(byte));
 	int a = 128; // 0b10000000
+	int length = strlen((char *)char_to_convert);
 
 	for (int i = 0; i < 8; i++)
 	{
-		if (char_to_convert[i] == '1')
+		if (i < length && char_to_convert[i] == '1')
 		{
 			*str |= a;
 		}
