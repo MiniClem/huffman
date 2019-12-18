@@ -2,7 +2,7 @@
 #include "../include/file.h"
 
 //EXTERN
-int compress(char *path_to_file)
+void compress(char *path_to_file)
 {
 	char compressed_filename[256] = {0};
 	char bell_key[] = {(char)7, '\0'};
@@ -54,8 +54,6 @@ int compress(char *path_to_file)
 	destruct_encodage(p_enc);
 	free(m);
 	printf("Compression terminee..\n");
-
-	return 0;
 }
 //EXTERN
 
@@ -190,12 +188,6 @@ Arbre huffman_merge(Arbre *l, int size)
 		{
 			Arbre a = malloc(sizeof(Noeud));
 			memcpy(a, l[i], sizeof(Noeud));
-			// for (int k = 0; k < size; k++)
-			// {
-			// detruire_arbre(l[i]);
-			// free(l);
-			// }
-
 			return a;
 		}
 	}
