@@ -9,14 +9,14 @@ int choose_path(char *out_c)
 	return 0;
 }
 
-int compress_selected(char *path_to_file)
+void compress_selected(char *path_to_file)
 {
-	return compress(path_to_file);
+	compress(path_to_file);
 }
 
-int decompress_selected(char *path_to_file)
+void decompress_selected(char *path_to_file)
 {
-	return decompression(path_to_file) ;
+	decompression(path_to_file);
 }
 
 void help()
