@@ -42,20 +42,8 @@ Elt lire_ascii(unsigned char *octet)
 		}
 	}
 	Elt ascii = (Elt)valeur;
-	// printf("%c \n", valeur); // Affiche la valeur de l'ascii lu
 	return ascii;
 }
-
-/* 
-on prend une chaine de caractères, on parcourt l'arbre
-Tant qu'on n'est pas arrivé au bout de la chaine, 
-on ajoute dans sequence la valeur de *code.
-on teste si on arrive sur une feuille. si on est sur une feuille
-on met le caractère dans clair. Si on n'arrive pas à une feuille,
-on relance la boucle
-
-
-*/
 
 unsigned char *decode(unsigned char *code, unsigned char *clair, Arbre decodage, unsigned char *sequence)
 {
@@ -70,7 +58,6 @@ unsigned char *decode(unsigned char *code, unsigned char *clair, Arbre decodage,
 				return clair;
 			}
 
-			// printf("sequence : %s, carac found : %c\n", sequence, c);
 			clair = unsigned_append_char(clair, c);
 			free(sequence);
 			sequence = malloc(sizeof(unsigned char *));
@@ -134,7 +121,6 @@ int decompression(char *filename)
 	printf("Lecture fichier..\n");
 	byte *t_b = lire_byte_fichier(filename, &size_file);
 	unsigned char *fichier = decompress_encodage(t_b, size_file);
-	// printf("Lu : %s\n", fichier);
 	printf("Creation du dico de caracteres..\n");
 	Arbre dico = creer_arbre('\0', 0, NULL, NULL);
 	lire_dico(fichier, &ind, dico);
@@ -185,13 +171,13 @@ unsigned char *decompress_encodage(byte *enc, int size)
 		free(c);
 		c = NULL;
 	}
-	// printf("size_decompress : %d, i = %d\n", size_decompress, i);
 
 	// Ajout du caractère de fin
 	decode[i * 8] = '\0';
 
 	return decode;
 }
+
 // DECOMPRESS
 
 // TESTS
