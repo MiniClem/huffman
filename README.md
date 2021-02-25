@@ -1,7 +1,7 @@
 ## huffman
 
 # Compilation
-Aller dans /src puis lancer la commande 'make clean' pusi 'make main'
+Aller dans /src, créez le dossier /obj puis lancez la commande 'make clean' suivi de'make main'
 
 ## Utilisation
 # Ligne de commande
